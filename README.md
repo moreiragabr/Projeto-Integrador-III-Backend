@@ -2,6 +2,7 @@
 Projeto integrador do terceiro semestre
 
 # Arquitetura do Projeto
+```
 zad_inventory/
 ├── entity/
 │   ├── Usuario.java
@@ -23,3 +24,4 @@ zad_inventory/
 │   └── OperacaoService.java
 ├── Main.java
 ├── DBConnection.java
+``` 
