@@ -1,4 +1,4 @@
-package service;
+package zad_inventory.service;
 
 public class ProdutoService {
 }
