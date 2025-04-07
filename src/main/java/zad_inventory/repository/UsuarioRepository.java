@@ -1,6 +1,6 @@
 package zad_inventory.repository;
 
-import zad_inventory.model.Usuario;
+import zad_inventory.entity.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
