@@ -1,42 +1,25 @@
 package zad_inventory.entity;
-import jakarta.persistence.*;
 
-@Entity
-@Table(name = "usuarios")
-public class UsuarioEntity {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Usuario {
     private Long id;
-    
-    @Column(nullable = false, length = 100)
     private String nome;
-    
-    @Column(unique = true, nullable = false)
     private String email;
-    
-    @Column(nullable = false)
     private String senha;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private TipoUsuario tipoUsuario;
 
     public enum TipoUsuario {
         FUNCIONARIO, GERENTE
     }
 
-    // Construtor padrão
-    public Usuario() {}
-
-    public Usuario(String nome, String email, String senha, TipoUsuario tipoUsuario) {
+    public Usuario(Long id, String nome, String email, String senha, TipoUsuario tipoUsuario) {
+        this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.tipoUsuario = tipoUsuario;
     }
 
-    // Getters e Setters
+    // Getters e setters (pode gerar com o IDE)
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -51,5 +34,4 @@ public class UsuarioEntity {
 
     public TipoUsuario getTipoUsuario() { return tipoUsuario; }
     public void setTipoUsuario(TipoUsuario tipoUsuario) { this.tipoUsuario = tipoUsuario; }
-
 }
