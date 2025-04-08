@@ -1,105 +1,154 @@
 package zad_inventory.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "produtos")
-public class ProdutoEntity {
+public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private int tamanho;
-
-    @Column(length = 50, nullable = false)
-    private String cor;
-
-    @Column(length = 50, nullable = false)
-    private String formato;
-
-    @Column(length = 255)
+    
+    @Column(nullable = false, length = 100)
+    private String nome;
+    
+    @Column(length = 500)
     private String descricao;
-
-    @Column(nullable = false)
-    private int estoque;
-
-    public ProdutoEntity() {
-        
+    
+    @Column(length = 50)
+    private String tamanho;
+    
+    @Column(length = 50)
+    private String cor;
+    
+    @Column(length = 50)
+    private String formato;
+    
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal preco;
+    
+    @Column(name = "quantidade_estoque", nullable = false)
+    private Integer estoque;
+    
+    @Column(name = "data_criacao", nullable = false, updatable = false)
+    private LocalDateTime dataCriacao;
+    
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
+    
+    // Construtores
+    public Produto() {
+        this.dataCriacao = LocalDateTime.now();
     }
-
-    public ProdutoEntity(int tamanho, String cor, String formato, String descricao, int estoque) {
-        this.ml = ml;
+    
+    public Produto(String nome, String descricao, String tamanho, String cor, 
+                  String formato, BigDecimal preco, Integer estoque) {
+        this();
+        this.nome = nome;
+        this.descricao = descricao;
+        this.tamanho = tamanho;
         this.cor = cor;
         this.formato = formato;
-        this.descricao = descricao;
+        this.preco = preco;
         this.estoque = estoque;
     }
-
+    
     // Getters e Setters
     public Long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    
+    public String getNome() {
+        return nome;
     }
-
-    public int getTamanho() {
-        return tamanho;
+    
+    public void setNome(String nome) {
+        this.nome = nome;
     }
-
-    public void setMl(int tamanho) {
-        this.tamanho = tamanho;
-    }
-
-    public String getCor() {
-        return cor;
-    }
-
-    public void setCor(String cor) {
-        this.cor = cor;
-    }
-
-    public String getFormato() {
-        return formato;
-    }
-
-    public void setFormato(String formato) {
-        this.formato = formato;
-    }
-
+    
     public String getDescricao() {
         return descricao;
     }
-
+    
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-
-    public int getEstoque() {
+    
+    public String getTamanho() {
+        return tamanho;
+    }
+    
+    public void setTamanho(String tamanho) {
+        this.tamanho = tamanho;
+    }
+    
+    public String getCor() {
+        return cor;
+    }
+    
+    public void setCor(String cor) {
+        this.cor = cor;
+    }
+    
+    public String getFormato() {
+        return formato;
+    }
+    
+    public void setFormato(String formato) {
+        this.formato = formato;
+    }
+    
+    public BigDecimal getPreco() {
+        return preco;
+    }
+    
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
+    }
+    
+    public Integer getEstoque() {
         return estoque;
     }
-
-    public void setEstoque(int estoque) {
+    
+    public void setEstoque(Integer estoque) {
         this.estoque = estoque;
     }
-
+    
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+    
+    public LocalDateTime getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+    
+    // Callbacks JPA
+    @PrePersist
+    protected void onCreate() {
+        this.dataCriacao = LocalDateTime.now();
+    }
+    
+    @PreUpdate
+    protected void onUpdate() {
+        this.dataAtualizacao = LocalDateTime.now();
+    }
+    
     @Override
     public String toString() {
-        return "ProdutoEntity{" +
-                "id=" + id +
-                ", ml=" + ml +
-                ", cor='" + cor + '\'' +
-                ", formato='" + formato + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", estoque=" + estoque +
-                '}';
+        return "Produto{" +
+               "id=" + id +
+               ", nome='" + nome + '\'' +
+               ", descricao='" + descricao + '\'' +
+               ", tamanho='" + tamanho + '\'' +
+               ", cor='" + cor + '\'' +
+               ", formato='" + formato + '\'' +
+               ", preco=" + preco +
+               ", estoque=" + estoque +
+               ", dataCriacao=" + dataCriacao +
+               ", dataAtualizacao=" + dataAtualizacao +
+               '}';
     }
 }
