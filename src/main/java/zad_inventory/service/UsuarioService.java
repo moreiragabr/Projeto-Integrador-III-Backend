@@ -5,44 +5,41 @@ import zad_inventory.entity.Usuario.TipoUsuario;
 import zad_inventory.repository.UsuarioRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public class UsuarioService {
+    private UsuarioRepository repository;
 
-    private final UsuarioRepository usuarioRepository;
-
-    public UsuarioService(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public UsuarioService(UsuarioRepository repository) {
+        this.repository = repository;
     }
 
-    public Usuario registrarUsuario(String nome, String email, String senha, TipoUsuario tipoUsuario) {
-        Optional<Usuario> existente = usuarioRepository.buscarPorEmail(email);
-        if (existente.isPresent()) {
-            throw new RuntimeException("Já existe um usuário com esse email!");
+    public void registrarUsuario(String nome, String email, String senha, TipoUsuario tipoUsuario) {
+        if (repository.buscarPorEmail(email) != null) {
+            throw new RuntimeException("Email já está em uso.");
         }
 
-        Usuario novoUsuario = new Usuario(null, nome, email, senha, tipoUsuario);
-        return usuarioRepository.salvar(novoUsuario);
+        Usuario novo = new Usuario();
+        novo.setNome(nome);
+        novo.setEmail(email);
+        novo.setSenha(senha);
+        novo.setTipoUsuario(tipoUsuario);
+
+        repository.salvar(novo);
     }
 
     public Usuario login(String email, String senha) {
-        Optional<Usuario> usuario = usuarioRepository.buscarPorEmail(email);
-        if (usuario.isPresent() && usuario.get().getSenha().equals(senha)) {
-            return usuario.get();
+        Usuario usuario = repository.buscarPorEmail(email);
+        if (usuario == null || !usuario.getSenha().equals(senha)) {
+            throw new RuntimeException("Credenciais inválidas.");
         }
-        throw new RuntimeException("Email ou senha inválidos.");
+        return usuario;
     }
 
     public List<Usuario> listarUsuarios() {
-        return usuarioRepository.listarTodos();
-    }
-
-    public Usuario buscarPorId(Long id) {
-        return usuarioRepository.buscarPorId(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        return repository.listarTodos();
     }
 
     public boolean removerUsuario(Long id) {
-        return usuarioRepository.deletarPorId(id);
+        return repository.removerPorId(id);
     }
 }
