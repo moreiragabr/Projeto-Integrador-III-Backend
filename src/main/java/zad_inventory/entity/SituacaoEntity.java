@@ -10,30 +10,34 @@ public class SituacaoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "situacao_nome")
+    private String situacaoNome;
+
     @ManyToOne
-    @JoinColumn(name = " ")
+    @JoinColumn(name = "fk_id_produto")
     private int produtoId;
 
-    @Column(name = " ")
+    @Column(name = "produto_nome")
     private String produtoNome;
 
     @ManyToOne
-    @JoinColumn(name = " ")
+    @JoinColumn(name = "fk_id_usuario")
     private int usuarioId;
 
-    @Column(name = " ")
+    @Column(name = "usuario_nome")
     private String usuarioNome;
 
-    @Column(name = " ")
+    @Column(name = "quantidade")
     private int quantidade;
 
-    @Column(name = " ")
+    @Column(name = "data")
     private LocalDateTime data;
 
     public SituacaoEntity() {}
 
-    public SituacaoEntity(Long id, int produtoId, String produtoNome, int usuarioId, String usuarioNome, int quantidade, LocalDateTime data) {
+    public SituacaoEntity(Long id, String situacaoNome, int produtoId, String produtoNome, int usuarioId, String usuarioNome, int quantidade, LocalDateTime data) {
         this.id = id;
+        this.situacaoNome = situacaoNome;
         this.produtoId = produtoId;
         this.produtoNome = produtoNome;
         this.usuarioId = usuarioId;
@@ -46,6 +50,7 @@ public class SituacaoEntity {
     public String toString() {
         return "SituacaoEntity{" +
                 "id=" + id +
+                ", situacaoNome='" + situacaoNome + '\'' +
                 ", produtoId=" + produtoId +
                 ", produtoNome='" + produtoNome + '\'' +
                 ", usuarioId=" + usuarioId +
@@ -54,6 +59,9 @@ public class SituacaoEntity {
                 ", data=" + data +
                 '}';
     }
+
+    public String getSituacaoNome() {return situacaoNome;}
+    public void setSituacaoNome(String situacaoNome) {this.situacaoNome = situacaoNome;}
 
     public Long getId() { return id;}
     public void setId(Long id) { this.id = id;}
