@@ -75,8 +75,8 @@ public class OperacaoEntity {
     public String getUsuarioNome() { return usuarioNome; }
     public void setUsuarioNome(String usuarioNome) { this.usuarioNome = usuarioNome; }
 
-    public String getSituacaoNome() { return situacao; }
-    public void setSituacaoNome(String situacaoNome) { this.situacao = situacaoNome; }
+    public String getSituacao() { return situacao; }
+    public void setSituacao(String situacao) { this.situacao = situacao; }
 
     public int getQuantidade() { return quantidade; }
     public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
