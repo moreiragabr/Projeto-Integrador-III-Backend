@@ -3,12 +3,13 @@ package zad_inventory.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Table(name = "produtos")
 public class Produto implements Serializable {
 
-  @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_produto")
     private Long idProduto;
@@ -18,7 +19,7 @@ public class Produto implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "fk_id_categoria", nullable = false)
-    private int idCategoria;
+    private Categoria categoria;  // Alterado de int para Categoria
     
     @Column(name = "descricao", columnDefinition = "TEXT")
     private String descricao;
@@ -42,9 +43,10 @@ public class Produto implements Serializable {
     public Produto() {
     }
 
-    public Produto(String nomeProduto, String descricao, String tamanho, 
-                  String cor, String formato, BigDecimal preco, Integer estoque) {
+    public Produto(String nomeProduto, Categoria categoria, String descricao, String tamanho, 
+                 String cor, String formato, BigDecimal preco, Integer estoque) {
         this.nomeProduto = nomeProduto;
+        this.categoria = categoria;
         this.descricao = descricao;
         this.tamanho = tamanho;
         this.cor = cor;
@@ -58,12 +60,24 @@ public class Produto implements Serializable {
         return idProduto;
     }
 
+    public void setIdProduto(Long idProduto) {
+        this.idProduto = idProduto;
+    }
+
     public String getNomeProduto() {
         return nomeProduto;
     }
 
     public void setNomeProduto(String nomeProduto) {
         this.nomeProduto = nomeProduto;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
     public String getDescricao() {
@@ -103,6 +117,9 @@ public class Produto implements Serializable {
     }
 
     public void setPreco(BigDecimal preco) {
+        if (preco.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Preço não pode ser negativo");
+        }
         this.preco = preco;
     }
 
@@ -118,10 +135,24 @@ public class Produto implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Produto produto = (Produto) o;
+        return Objects.equals(idProduto, produto.idProduto);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idProduto);
+    }
+
+    @Override
     public String toString() {
         return "Produto{" +
                "idProduto=" + idProduto +
                ", nomeProduto='" + nomeProduto + '\'' +
+               ", categoria=" + categoria +
                ", descricao='" + descricao + '\'' +
                ", tamanho='" + tamanho + '\'' +
                ", cor='" + cor + '\'' +
