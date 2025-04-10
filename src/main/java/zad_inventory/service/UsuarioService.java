@@ -1,45 +1,42 @@
 package zad_inventory.service;
 
-import zad_inventory.entity.Usuario;
-import zad_inventory.entity.Usuario.TipoUsuario;
+import zad_inventory.entity.UsuarioEntity;
+import zad_inventory.entity.UsuarioEntity.TipoUsuario;
 import zad_inventory.repository.UsuarioRepository;
 
 import java.util.List;
 
 public class UsuarioService {
-    private UsuarioRepository repository;
 
-    public UsuarioService(UsuarioRepository repository) {
-        this.repository = repository;
+    private final UsuarioRepository usuarioRepo;
+
+    public UsuarioService(UsuarioRepository usuarioRepo) {
+        this.usuarioRepo = usuarioRepo;
     }
 
-    public void registrarUsuario(String nome, String email, String senha, TipoUsuario tipoUsuario) {
-        if (repository.buscarPorEmail(email) != null) {
-            throw new RuntimeException("Email já está em uso.");
+    public void registrarUsuario(UsuarioEntity novoUsuario, UsuarioEntity solicitante) {
+        if (solicitante.getTipoUsuario() != TipoUsuario.GERENTE) {
+            throw new RuntimeException("Apenas gerentes podem registrar novos usuários.");
+        }
+        usuarioRepo.salvar(novoUsuario);
+    }
+
+    public void deletarUsuario(Long id, UsuarioEntity solicitante) {
+        if (solicitante.getTipoUsuario() != TipoUsuario.GERENTE) {
+            throw new RuntimeException("Apenas gerentes podem deletar usuários.");
         }
 
-        Usuario novo = new Usuario();
-        novo.setNome(nome);
-        novo.setEmail(email);
-        novo.setSenha(senha);
-        novo.setTipoUsuario(tipoUsuario);
-
-        repository.salvar(novo);
-    }
-
-    public Usuario login(String email, String senha) {
-        Usuario usuario = repository.buscarPorEmail(email);
-        if (usuario == null || !usuario.getSenha().equals(senha)) {
-            throw new RuntimeException("Credenciais inválidas.");
+        UsuarioEntity usuario = usuarioRepo.buscarPorId(id);
+        if (usuario != null) {
+            usuarioRepo.remover(usuario);
         }
-        return usuario;
     }
 
-    public List<Usuario> listarUsuarios() {
-        return repository.listarTodos();
+    public List<UsuarioEntity> listarUsuarios() {
+        return usuarioRepo.listarTodos();
     }
 
-    public boolean removerUsuario(Long id) {
-        return repository.removerPorId(id);
+    public UsuarioEntity buscarPorEmail(String email) {
+        return usuarioRepo.buscarPorEmail(email);
     }
 }
