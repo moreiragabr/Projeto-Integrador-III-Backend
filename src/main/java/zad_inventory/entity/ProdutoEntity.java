@@ -13,7 +13,7 @@ public class Produto implements Serializable {
     @Column(name = "id_produto")
     private Long idProduto;
     
-        @Column(name = "nome_produto", nullable = false, length = 255)
+    @Column(name = "nome_produto", nullable = false, length = 255)
     private String nomeProduto;
     
     @ManyToOne
