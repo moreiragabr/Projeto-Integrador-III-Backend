@@ -1,53 +1,50 @@
 package zad_inventory.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "produtos")
-public class Produto {
+public class Produto implements Serializable {
 
-    @Id
+  @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_produto")
+    private Long idProduto;
     
-    @Column(nullable = false, length = 100)
-    private String nome;
+        @Column(name = "nome_produto", nullable = false, length = 255)
+    private String nomeProduto;
     
-    @Column(length = 500)
+    @ManyToOne
+    @JoinColumn(name = "fk_id_categoria", nullable = false)
+    private int idCategoria;
+    
+    @Column(name = "descricao", columnDefinition = "TEXT")
     private String descricao;
     
-    @Column(length = 50)
+    @Column(name = "tamanho", length = 50)
     private String tamanho;
     
-    @Column(length = 50)
+    @Column(name = "cor", nullable = false, length = 50)
     private String cor;
     
-    @Column(length = 50)
+    @Column(name = "formato", nullable = false, length = 50)
     private String formato;
     
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "preco", nullable = false, precision = 10, scale = 2)
     private BigDecimal preco;
     
-    @Column(name = "quantidade_estoque", nullable = false)
-    private Integer estoque;
-    
-    @Column(name = "data_criacao", nullable = false, updatable = false)
-    private LocalDateTime dataCriacao;
-    
-    @Column(name = "data_atualizacao")
-    private LocalDateTime dataAtualizacao;
-    
+    @Column(name = "estoque")
+    private Integer estoque = 0;
+
     // Construtores
     public Produto() {
-        this.dataCriacao = LocalDateTime.now();
     }
-    
-    public Produto(String nome, String descricao, String tamanho, String cor, 
-                  String formato, BigDecimal preco, Integer estoque) {
-        this();
-        this.nome = nome;
+
+    public Produto(String nomeProduto, String descricao, String tamanho, 
+                  String cor, String formato, BigDecimal preco, Integer estoque) {
+        this.nomeProduto = nomeProduto;
         this.descricao = descricao;
         this.tamanho = tamanho;
         this.cor = cor;
@@ -55,100 +52,82 @@ public class Produto {
         this.preco = preco;
         this.estoque = estoque;
     }
-    
+
     // Getters e Setters
-    public Long getId() {
-        return id;
+    public Long getIdProduto() {
+        return idProduto;
     }
-    
-    public String getNome() {
-        return nome;
+
+    public String getNomeProduto() {
+        return nomeProduto;
     }
-    
-    public void setNome(String nome) {
-        this.nome = nome;
+
+    public void setNomeProduto(String nomeProduto) {
+        this.nomeProduto = nomeProduto;
     }
-    
+
     public String getDescricao() {
         return descricao;
     }
-    
+
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
+
     public String getTamanho() {
         return tamanho;
     }
-    
+
     public void setTamanho(String tamanho) {
         this.tamanho = tamanho;
     }
-    
+
     public String getCor() {
         return cor;
     }
-    
+
     public void setCor(String cor) {
         this.cor = cor;
     }
-    
+
     public String getFormato() {
         return formato;
     }
-    
+
     public void setFormato(String formato) {
         this.formato = formato;
     }
-    
+
     public BigDecimal getPreco() {
         return preco;
     }
-    
+
     public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
-    
+
     public Integer getEstoque() {
         return estoque;
     }
-    
+
     public void setEstoque(Integer estoque) {
+        if (estoque < 0) {
+            throw new IllegalArgumentException("Estoque não pode ser negativo");
+        }
         this.estoque = estoque;
     }
-    
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-    
-    public LocalDateTime getDataAtualizacao() {
-        return dataAtualizacao;
-    }
-    
-    // Callbacks JPA
-    @PrePersist
-    protected void onCreate() {
-        this.dataCriacao = LocalDateTime.now();
-    }
-    
-    @PreUpdate
-    protected void onUpdate() {
-        this.dataAtualizacao = LocalDateTime.now();
-    }
-    
+
     @Override
     public String toString() {
         return "Produto{" +
-               "id=" + id +
-               ", nome='" + nome + '\'' +
+               "idProduto=" + idProduto +
+               ", nomeProduto='" + nomeProduto + '\'' +
                ", descricao='" + descricao + '\'' +
                ", tamanho='" + tamanho + '\'' +
                ", cor='" + cor + '\'' +
                ", formato='" + formato + '\'' +
                ", preco=" + preco +
                ", estoque=" + estoque +
-               ", dataCriacao=" + dataCriacao +
-               ", dataAtualizacao=" + dataAtualizacao +
                '}';
     }
 }
