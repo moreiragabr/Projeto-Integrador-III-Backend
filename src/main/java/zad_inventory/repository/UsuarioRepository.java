@@ -1,58 +1,43 @@
 package zad_inventory.repository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import zad_inventory.entity.Usuario;
+import zad_inventory.entity.UsuarioEntity;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class UsuarioRepository {
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("usuarioPU");
 
-    public void salvar(Usuario usuario) {
-        EntityManager em = emf.createEntityManager();
+    private final EntityManager em;
+
+    public UsuarioRepository(EntityManager em) {
+        this.em = em;
+    }
+
+    public void salvar(UsuarioEntity usuario) {
         em.getTransaction().begin();
         em.persist(usuario);
         em.getTransaction().commit();
-        em.close();
     }
 
-    public Usuario buscarPorEmail(String email) {
-        EntityManager em = emf.createEntityManager();
-        List<Usuario> resultado = em
-            .createQuery("SELECT u FROM Usuario u WHERE u.email = :email", Usuario.class)
-            .setParameter("email", email)
-            .getResultList();
-        em.close();
-        return resultado.isEmpty() ? null : resultado.get(0);
+    public void remover(UsuarioEntity usuario) {
+        em.getTransaction().begin();
+        em.remove(em.contains(usuario) ? usuario : em.merge(usuario));
+        em.getTransaction().commit();
     }
 
-    public Usuario buscarPorId(Long id) {
-        EntityManager em = emf.createEntityManager();
-        Usuario usuario = em.find(Usuario.class, id);
-        em.close();
-        return usuario;
+    public UsuarioEntity buscarPorId(Long id) {
+        return em.find(UsuarioEntity.class, id);
     }
 
-    public List<Usuario> listarTodos() {
-        EntityManager em = emf.createEntityManager();
-        List<Usuario> usuarios = em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
-        em.close();
-        return usuarios;
+    public UsuarioEntity buscarPorEmail(String email) {
+        TypedQuery<UsuarioEntity> query = em.createQuery(
+            "SELECT u FROM UsuarioEntity u WHERE u.email = :email", UsuarioEntity.class);
+        query.setParameter("email", email);
+        return query.getSingleResult();
     }
 
-    public boolean removerPorId(Long id) {
-        EntityManager em = emf.createEntityManager();
-        Usuario usuario = em.find(Usuario.class, id);
-        if (usuario != null) {
-            em.getTransaction().begin();
-            em.remove(usuario);
-            em.getTransaction().commit();
-            em.close();
-            return true;
-        }
-        em.close();
-        return false;
+    public List<UsuarioEntity> listarTodos() {
+        return em.createQuery("SELECT u FROM UsuarioEntity u", UsuarioEntity.class).getResultList();
     }
 }
