@@ -1,103 +1,90 @@
 package zad_inventory.repository;
 
-import zad_inventory.entity.Produto;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.TypedQuery;
+import zad_inventory.entity.ProdutoEntity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.Optional;
 
 public class ProdutoRepository {
 
-    private final EntityManager entityManager;
+    private final EntityManagerFactory emf;
+    private final EntityManager em;
 
-    public ProdutoRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public ProdutoRepository() {
+        this.emf = Persistence.createEntityManagerFactory("nome-da-sua-unidade-de-persistencia");
+        this.em = emf.createEntityManager();
     }
 
-    // Operações CRUD básicas
-
-    public Produto save(Produto produto) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            if (produto.getIdProduto() == null) {
-                entityManager.persist(produto);
-            } else {
-                produto = entityManager.merge(produto);
-            }
-            transaction.commit();
-            return produto;
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
+    // Salvar ou atualizar produto
+    public ProdutoEntity save(ProdutoEntity produto) {
+        em.getTransaction().begin();
+        if (produto.getId() == null) {
+            em.persist(produto);
+        } else {
+            produto = em.merge(produto);
         }
+        em.getTransaction().commit();
+        return produto;
     }
 
-    public Optional<Produto> findById(Long id) {
-        Produto produto = entityManager.find(Produto.class, id);
-        return Optional.ofNullable(produto);
+    // Buscar por ID
+    public ProdutoEntity findById(Long id) {
+        return em.find(ProdutoEntity.class, id);
     }
 
-    public List<Produto> findAll() {
-        TypedQuery<Produto> query = entityManager.createQuery(
-            "SELECT p FROM Produto p", Produto.class);
+    // Listar todos
+    public List<ProdutoEntity> findAll() {
+        TypedQuery<ProdutoEntity> query = em.createQuery("SELECT p FROM ProdutoEntity p", ProdutoEntity.class);
         return query.getResultList();
     }
 
+    // Deletar produto
     public void delete(Long id) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            Produto produto = entityManager.find(Produto.class, id);
-            if (produto != null) {
-                entityManager.remove(produto);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
+        em.getTransaction().begin();
+        ProdutoEntity produto = em.find(ProdutoEntity.class, id);
+        if (produto != null) {
+            em.remove(produto);
         }
+        em.getTransaction().commit();
     }
 
-    // Consultas específicas
-
-    public List<Produto> findByNome(String nome) {
-        TypedQuery<Produto> query = entityManager.createQuery(
-            "SELECT p FROM Produto p WHERE p.nomeProduto LIKE :nome", Produto.class);
+    // Buscar por nome (contendo)
+    public List<ProdutoEntity> findByNomeContaining(String nome) {
+        TypedQuery<ProdutoEntity> query = em.createQuery(
+                "SELECT p FROM ProdutoEntity p WHERE p.nomeProduto LIKE :nome", ProdutoEntity.class);
         query.setParameter("nome", "%" + nome + "%");
         return query.getResultList();
     }
 
-    public List<Produto> findByCategoria(Long categoriaId) {
-        TypedQuery<Produto> query = entityManager.createQuery(
-            "SELECT p FROM Produto p WHERE p.categoria.id = :categoriaId", Produto.class);
+    // Buscar por categoria
+    public List<ProdutoEntity> findByCategoriaId(int categoriaId) {
+        TypedQuery<ProdutoEntity> query = em.createQuery(
+                "SELECT p FROM ProdutoEntity p WHERE p.categoriaId = :categoriaId", ProdutoEntity.class);
         query.setParameter("categoriaId", categoriaId);
         return query.getResultList();
     }
 
-    public List<Produto> findByPrecoBetween(BigDecimal min, BigDecimal max) {
-        TypedQuery<Produto> query = entityManager.createQuery(
-            "SELECT p FROM Produto p WHERE p.preco BETWEEN :min AND :max", Produto.class);
-        query.setParameter("min", min);
-        query.setParameter("max", max);
+    // Buscar por cor
+    public List<ProdutoEntity> findByCor(String cor) {
+        TypedQuery<ProdutoEntity> query = em.createQuery(
+                "SELECT p FROM ProdutoEntity p WHERE p.cor = :cor", ProdutoEntity.class);
+        query.setParameter("cor", cor);
         return query.getResultList();
     }
 
-    public List<Produto> findComEstoqueBaixo(int nivel) {
-        TypedQuery<Produto> query = entityManager.createQuery(
-            "SELECT p FROM Produto p WHERE p.estoque <= :nivel", Produto.class);
-        query.setParameter("nivel", nivel);
+    // Buscar por tamanho
+    public List<ProdutoEntity> findByTamanho(String tamanho) {
+        TypedQuery<ProdutoEntity> query = em.createQuery(
+                "SELECT p FROM ProdutoEntity p WHERE p.tamanho = :tamanho", ProdutoEntity.class);
+        query.setParameter("tamanho", tamanho);
         return query.getResultList();
     }
 
-    public long count() {
-        TypedQuery<Long> query = entityManager.createQuery(
-            "SELECT COUNT(p) FROM Produto p", Long.class);
-        return query.getSingleResult();
+    // Fechar EntityManager
+    public void close() {
+        em.close();
+        emf.close();
     }
 }
