@@ -1,6 +1,5 @@
 package zad_inventory.entity;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,7 +19,7 @@ public class CategoriaEntity{
     @Column
     private String descricao;
 
-    public Categoria() {
+    public CategoriaEntity() {
     }
 
   
