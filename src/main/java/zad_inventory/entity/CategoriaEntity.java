@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 
 @Table(name = "categorias")
-public class Categoria {
+public class CategoriaEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Categoria {
     }
 
   
-    public Categoria(String nome, String descricao) {
+    public CategoriaEntity(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
     }
@@ -57,10 +57,4 @@ public class Categoria {
     public String toString() {
         return "Categoria [id=" + id + ", nome=" + nome + ", descricao=" + descricao + "]";
     }
-    
-    public static class CategoriaHelper {
-        public static String formatarNome(Categoria categoria) {
-            return categoria.getNome().toUpperCase();
-        }
-    }
 }
