@@ -13,7 +13,7 @@ public class ProdutoRepository {
     private final EntityManager em;
 
     public ProdutoRepository() {
-        this.emf = Persistence.createEntityManagerFactory("nome-da-sua-unidade-de-persistencia");
+        this.emf = Persistence.createEntityManagerFactory("zad_inventory");
         this.em = emf.createEntityManager();
     }
 
