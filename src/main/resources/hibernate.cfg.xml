@@ -7,9 +7,9 @@
     <session-factory>
         <!-- Configurações do PostgreSQL -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/nome_do_banco</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/zad_inventory</property>
         <property name="hibernate.connection.username">postgres</property>
-        <property name="hibernate.connection.password">98187637</property>
+        <property name="hibernate.connection.password">gH8foP04YTM34</property>
 
         <!-- Dialeto específico do PostgreSQL -->
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
@@ -21,6 +21,8 @@
 
         <!-- Mapeamento das entidades -->
         <!-- Adicione suas classes de entidade aqui -->
+
+        <mapping class=""/>
         <mapping class="com.exemplo.model.Cliente"/>
         <mapping class="com.exemplo.model.Pedido"/>
     </session-factory>

@@ -9,29 +9,31 @@ public class CategoriaRepository {
 
     private EntityManager em;
 
-    //CRUD
+    public CategoriaRepository(EntityManager em) {
+        this.em = em;
+    }
 
-    public void salvar(CategoriaRepository categoria){
+    public void salvar(CategoriaEntity categoria){
         em.getTransaction().begin();
         em.persist(categoria);
         em.getTransaction().commit();
     }
 
-    public List<CategoriaRepository> buscarTodos(){
-        return em.createQuery("SELECT s FROM situacao s", CategoriaRepository.class).getResultList();
+    public List<CategoriaEntity> buscarTodos(){
+        return em.createQuery("SELECT c FROM CategoriaEntity c", CategoriaEntity.class).getResultList();
     }
 
-    public CategoriaRepository buscarPorId(Long id){
-        return em.find(CategoriaRepository.class, id);
+    public CategoriaEntity buscarPorId(Long id){
+        return em.find(CategoriaEntity.class, id);
     }
 
-    public void atualizar(CategoriaRepository categoria){
+    public void atualizar(CategoriaEntity categoria){
         em.getTransaction().begin();
         em.merge(categoria);
         em.getTransaction().commit();
     }
 
-    public void remover(CategoriaRepository categoria){
+    public void remover(CategoriaEntity categoria){
         em.getTransaction().begin();
         em.remove(em.contains(categoria) ? categoria : em.merge(categoria));
         em.getTransaction().commit();
