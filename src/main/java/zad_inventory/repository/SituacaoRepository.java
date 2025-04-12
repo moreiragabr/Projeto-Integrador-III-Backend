@@ -1,5 +1,5 @@
 package zad_inventory.repository;
-
+/*
 import zad_inventory.entity.SituacaoEntity;
 
 import javax.persistence.EntityManager;
@@ -37,3 +37,4 @@ public class SituacaoRepository {
         em.getTransaction().commit();
     }
 }
+*/

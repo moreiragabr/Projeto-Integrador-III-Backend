@@ -1,5 +1,5 @@
 package zad_inventory.entity;
-
+/*
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -84,3 +84,4 @@ public class SituacaoEntity {
     public LocalDateTime getData() {return data;}
     public void setData(LocalDateTime data) {this.data = data;}
 }
+*/
