@@ -4,7 +4,11 @@
     <persistence-unit name="zad_inventory" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
+        <class>zad_inventory.entity.CategoriaEntity</class>
+        <class>zad_inventory.entity.OperacaoEntity</class>
         <class>zad_inventory.entity.ProdutoEntity</class>
+        <class>zad_inventory.entity.SituacaoEntity</class>
+        <class>zad_inventory.entity.UsuarioEntity</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>

@@ -16,8 +16,10 @@ public class ProdutoEntity {
     @Column(name = "quantidade")
     private int quantidade;
 
+    /*
     @Column(name = "fk_categoria_id")
     private int categoriaId; //public classe variavel
+    */
 
     @Column(name = "cor")
     private String cor;
@@ -31,7 +33,7 @@ public class ProdutoEntity {
         this.id = id;
         this.nomeProduto = nomeProduto;
         this.quantidade = quantidade;
-        this.categoriaId = categoriaId;
+        //this.categoriaId = categoriaId;
         this.cor = cor;
         this.tamanho = tamanho;
     }
@@ -42,7 +44,7 @@ public class ProdutoEntity {
                 "id=" + id +
                 ", nomeProduto='" + nomeProduto + '\'' +
                 ", quantidade=" + quantidade +
-                ", categoriaId=" + categoriaId +
+                //", categoriaId=" + categoriaId +
                 ", cor='" + cor + '\'' +
                 ", tamanho='" + tamanho + '\'' +
                 '}';
@@ -58,8 +60,8 @@ public class ProdutoEntity {
     public int getQuantidade() { return quantidade; }
     public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
 
-    public int getCategoriaId() { return categoriaId; }
-    public void setCategoriaId(int categoriaId) { this.categoriaId = categoriaId; }
+    //public int getCategoriaId() { return categoriaId; }
+    //public void setCategoriaId(int categoriaId) { this.categoriaId = categoriaId; }
 
     public String getCor() { return cor; }
     public void setCor(String cor) { this.cor = cor; }

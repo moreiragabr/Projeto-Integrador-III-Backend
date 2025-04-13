@@ -15,6 +15,7 @@ public class Main {
     private static UsuarioEntity usuarioLogado;
 
     public static void main(String[] args) {
+
         EntityManager em = DBConnection.getEntityManager();
         usuarioService = new UsuarioService(new UsuarioRepository(em));
 

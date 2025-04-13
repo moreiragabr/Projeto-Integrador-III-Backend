@@ -98,9 +98,9 @@ public class ProdutoService {
         if (produto.getQuantidade() < 0) {
             throw new IllegalArgumentException("Quantidade não pode ser negativa");
         }
-        if (produto.getCategoriaId() <= 0) {
-            throw new IllegalArgumentException("Categoria inválida");
-        }
+       // if (produto.getCategoriaId() <= 0) {
+       //     throw new IllegalArgumentException("Categoria inválida");
+       // }
     }
 
     // Fechar recursos

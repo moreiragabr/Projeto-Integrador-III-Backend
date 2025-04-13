@@ -1,5 +1,5 @@
 package zad_inventory.repository;
-/*
+
 import zad_inventory.entity.SituacaoEntity;
 
 import javax.persistence.EntityManager;
@@ -8,6 +8,8 @@ import java.util.List;
 public class SituacaoRepository {
 
     private EntityManager em;
+
+    public SituacaoRepository(EntityManager em){this.em = em;}
 
     //CRUD
 
@@ -18,7 +20,7 @@ public class SituacaoRepository {
     }
 
     public List<SituacaoEntity> buscarTodos(){
-        return em.createQuery("SELECT s FROM situacao s", SituacaoEntity.class).getResultList();
+        return em.createQuery("SELECT s FROM SituacaoEntity s", SituacaoEntity.class).getResultList();
     }
 
     public SituacaoEntity buscarPorId(Long id){
@@ -37,4 +39,3 @@ public class SituacaoRepository {
         em.getTransaction().commit();
     }
 }
-*/
