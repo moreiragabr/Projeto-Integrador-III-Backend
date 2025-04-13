@@ -25,7 +25,7 @@ public class Menus {
     private static final String BORDER = "╔══════════════════════════════════╗";
     private static final String BORDER_MID = "╠══════════════════════════════════╣";
     private static final String BORDER_BOTTOM = "╚══════════════════════════════════╝";
-    private static final String HEADER = "║           ZAD INVENTORY           ║";
+    private static final String HEADER = "║           ZAD INVENTORY          ║";
 
     public static void menuInicial(UsuarioEntity usuario) {
         usuarioLogado = usuario;
@@ -126,14 +126,14 @@ public class Menus {
             System.out.println(BORDER);
             System.out.println("║         MENU DE PRODUTOS         ║");
             System.out.println(BORDER_MID);
-            System.out.println("║ 1. Criar produto                ║");
-            System.out.println("║ 2. Listar produtos              ║");
-            System.out.println("║ 3. Editar produto               ║");
-            System.out.println("║ 4. Excluir produto              ║");
-            System.out.println("║ 5. Buscar por nome              ║");
-            System.out.println("║ 6. Buscar por categoria         ║");
-            System.out.println("║ 7. Gerenciar estoque            ║");
-            System.out.println("║ 0. Voltar                       ║");
+            System.out.println("║ 1. Criar produto                 ║");
+            System.out.println("║ 2. Listar produtos               ║");
+            System.out.println("║ 3. Editar produto                ║");
+            System.out.println("║ 4. Excluir produto               ║");
+            System.out.println("║ 5. Buscar por nome               ║");
+            System.out.println("║ 6. Buscar por categoria          ║");
+            System.out.println("║ 7. Gerenciar estoque             ║");
+            System.out.println("║ 0. Voltar                        ║");
             System.out.println(BORDER_BOTTOM);
 
             int opcao = lerInteiro("..::: Digite sua opção: ");
@@ -180,7 +180,7 @@ public class Menus {
     private static void listarProdutos() {
         clearScreen();
         System.out.println(BORDER);
-        System.out.println("║        LISTA DE PRODUTOS       ║");
+        System.out.println("║        LISTA DE PRODUTOS         ║");
         System.out.println(BORDER_MID);
 
         try {
@@ -190,7 +190,7 @@ public class Menus {
                 System.out.println("║ Nenhum produto cadastrado         ║");
             } else {
                 for (ProdutoEntity p : produtos) {
-                    System.out.printf("║ ID: %-4d | %-20s ║\n", p.getId(), p.getNomeProduto());
+                    System.out.printf("║ ID: %-4d | %-20s  ║\n", p.getId(), p.getNomeProduto());
                     System.out.printf("║ Qtd: %-3d | Categoria: %-10d ║\n", p.getQuantidade(), p.getCategoriaId());
                     System.out.printf("║ Cor: %-5s | Tamanho: %-10s ║\n", p.getCor(), p.getTamanho());
                     System.out.println(BORDER_MID);
@@ -387,13 +387,13 @@ public class Menus {
         while (true) {
             clearScreen();
             System.out.println(BORDER);
-            System.out.println("║       MENU DE CATEGORIAS       ║");
+            System.out.println("║       MENU DE CATEGORIAS         ║");
             System.out.println(BORDER_MID);
-            System.out.println("║ 1. Criar categoria           ║");
-            System.out.println("║ 2. Listar categorias         ║");
-            System.out.println("║ 3. Editar categoria          ║");
-            System.out.println("║ 4. Excluir categoria         ║");
-            System.out.println("║ 0. Voltar                    ║");
+            System.out.println("║ 1. Criar categoria               ║");
+            System.out.println("║ 2. Listar categorias             ║");
+            System.out.println("║ 3. Editar categoria              ║");
+            System.out.println("║ 4. Excluir categoria             ║");
+            System.out.println("║ 0. Voltar                        ║");
             System.out.println(BORDER_BOTTOM);
 
             int opcao = lerInteiro("..::: Digite sua opção: ");
@@ -546,13 +546,13 @@ public class Menus {
         while (true) {
             clearScreen();
             System.out.println(BORDER);
-            System.out.println("║       MENU DE SITUAÇÃO        ║");
+            System.out.println("║       MENU DE SITUAÇÃO           ║");
             System.out.println(BORDER_MID);
-            System.out.println("║ 1. Criar situação            ║");
-            System.out.println("║ 2. Editar situação           ║");
-            System.out.println("║ 3. Listar situações          ║");
-            System.out.println("║ 4. Excluir situação           ║");
-            System.out.println("║ 0. Voltar                     ║");
+            System.out.println("║ 1. Criar situação                ║");
+            System.out.println("║ 2. Editar situação               ║");
+            System.out.println("║ 3. Listar situações              ║");
+            System.out.println("║ 4. Excluir situação              ║");
+            System.out.println("║ 0. Voltar                        ║");
             System.out.println(BORDER_BOTTOM);
 
             int opcao = lerInteiro("..::: Digite sua opção: ");
@@ -644,13 +644,13 @@ public class Menus {
         while (true) {
             clearScreen();
             System.out.println(BORDER);
-            System.out.println("║        MENU DE USUÁRIOS        ║");
+            System.out.println("║        MENU DE USUÁRIOS          ║");
             System.out.println(BORDER_MID);
-            System.out.println("║ 1. Listar usuários            ║");
-            System.out.println("║ 2. Registrar usuário           ║");
-            System.out.println("║ 3. Excluir usuário             ║");
-            System.out.println("║ 4. Editar nome                 ║");
-            System.out.println("║ 0. Voltar                      ║");
+            System.out.println("║ 1. Listar usuários               ║");
+            System.out.println("║ 2. Registrar usuário             ║");
+            System.out.println("║ 3. Excluir usuário               ║");
+            System.out.println("║ 4. Editar nome                   ║");
+            System.out.println("║ 0. Voltar                        ║");
             System.out.println(BORDER_BOTTOM);
 
             int opcao = lerInteiro("..::: Digite sua opção: ");
