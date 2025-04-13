@@ -1,34 +1,43 @@
 package zad_inventory.service;
 
 import zad_inventory.entity.CategoriaEntity;
-import zad_inventory.repository.CategoriaRepository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 
 public class CategoriaService {
 
-    private final CategoriaRepository categoriaRepository;
+    @PersistenceContext
+    private EntityManager em;
 
-    public CategoriaService(CategoriaRepository categoriaRepository) {
-        this.categoriaRepository = categoriaRepository;
+    @Transactional
+    public void salvar(CategoriaEntity categoria) {
+        em.getTransaction().begin();
+        em.persist(categoria);
+        em.getTransaction().commit();
     }
 
-    public void cadastrarCategoria(String nome) {
-        if (nome == null || nome.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome da categoria não pode ser vazio.");
-        }
-        CategoriaEntity existente = categoriaRepository.buscarPorNome(nome);
-        if (existente != null) {
-            throw new RuntimeException("Categoria já existe.");
-        }
-        categoriaRepository.salvar(new CategoriaEntity(nome));
+    public List<CategoriaEntity> buscarTodos(){
+        return em.createQuery("SELECT c FROM CategoriaEntity c", CategoriaEntity.class).getResultList();
     }
 
-    public List<CategoriaEntity> listarCategorias() {
-        return categoriaRepository.listarTodas();
+    public CategoriaEntity buscarPorId(Long id){
+        return em.find(CategoriaEntity.class, id);
     }
 
-    public CategoriaEntity buscarPorNome(String nome) {
-        return categoriaRepository.buscarPorNome(nome);
+    @Transactional
+    public void atualizar(CategoriaEntity categoria){
+        em.getTransaction().begin();
+        em.merge(categoria);
+        em.getTransaction().commit();
+    }
+
+    @Transactional
+    public void remover(CategoriaEntity categoria){
+        em.getTransaction().begin();
+        em.remove(em.contains(categoria) ? categoria : em.merge(categoria));
+        em.getTransaction().commit();
     }
 }

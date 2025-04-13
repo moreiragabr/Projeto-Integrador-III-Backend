@@ -17,7 +17,7 @@ public class ProdutoEntity {
     private int quantidade;
 
     @Column(name = "fk_categoria_id")
-    private int categoriaId;
+    private int categoriaId; //public classe variavel
 
     @Column(name = "cor")
     private String cor;

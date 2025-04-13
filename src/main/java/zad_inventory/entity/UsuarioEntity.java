@@ -2,6 +2,7 @@ package zad_inventory.entity;
 
 import javax.persistence.*;
 
+
 @Entity
 @Table(name = "usuarios")
 public class UsuarioEntity {

@@ -1,6 +1,8 @@
 package zad_inventory.repository;
 
 import zad_inventory.entity.ProdutoEntity;
+import zad_inventory.entity.UsuarioEntity;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -13,7 +15,7 @@ public class ProdutoRepository {
     private final EntityManager em;
 
     public ProdutoRepository() {
-        this.emf = Persistence.createEntityManagerFactory("nome-da-sua-unidade-de-persistencia");
+        this.emf = Persistence.createEntityManagerFactory("zad_inventory");
         this.em = emf.createEntityManager();
     }
 
@@ -36,8 +38,9 @@ public class ProdutoRepository {
 
     // Listar todos
     public List<ProdutoEntity> findAll() {
-        TypedQuery<ProdutoEntity> query = em.createQuery("SELECT p FROM ProdutoEntity p", ProdutoEntity.class);
-        return query.getResultList();
+    //    TypedQuery<ProdutoEntity> query = em.createQuery("SELECT p FROM ProdutoEntity p", ProdutoEntity.class);
+        return em.createQuery("SELECT p FROM ProdutoEntity p", ProdutoEntity.class).getResultList();
+    //    return query.getResultList();
     }
 
     // Deletar produto
@@ -72,6 +75,13 @@ public class ProdutoRepository {
                 "SELECT p FROM ProdutoEntity p WHERE p.cor = :cor", ProdutoEntity.class);
         query.setParameter("cor", cor);
         return query.getResultList();
+    }
+
+    public int countByCategoriaId(int categoriaId) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(p) FROM ProdutoEntity p WHERE p.categoriaId = :categoriaId", Long.class);
+        query.setParameter("categoriaId", categoriaId);
+        return query.getSingleResult().intValue();
     }
 
     // Buscar por tamanho

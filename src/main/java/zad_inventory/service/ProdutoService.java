@@ -39,6 +39,13 @@ public class ProdutoService {
         produtoRepository.delete(id);
     }
 
+    public int contarProdutosPorCategoria(int categoriaId) {
+        if (categoriaId <= 0) {
+            throw new IllegalArgumentException("ID de categoria inválido");
+        }
+        return produtoRepository.countByCategoriaId(categoriaId);
+    }
+
     // Métodos específicos de busca
     public List<ProdutoEntity> buscarPorNome(String nome) {
         if (nome == null || nome.trim().isEmpty()) {
