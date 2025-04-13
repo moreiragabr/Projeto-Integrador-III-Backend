@@ -1,6 +1,8 @@
 package zad_inventory.repository;
 
 import zad_inventory.entity.ProdutoEntity;
+import zad_inventory.entity.UsuarioEntity;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -36,8 +38,9 @@ public class ProdutoRepository {
 
     // Listar todos
     public List<ProdutoEntity> findAll() {
-        TypedQuery<ProdutoEntity> query = em.createQuery("SELECT p FROM ProdutoEntity p", ProdutoEntity.class);
-        return query.getResultList();
+    //    TypedQuery<ProdutoEntity> query = em.createQuery("SELECT p FROM ProdutoEntity p", ProdutoEntity.class);
+        return em.createQuery("SELECT p FROM ProdutoEntity p", ProdutoEntity.class).getResultList();
+    //    return query.getResultList();
     }
 
     // Deletar produto
