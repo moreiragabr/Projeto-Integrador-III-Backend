@@ -1,7 +1,6 @@
 package zad_inventory.entity;
 
 import javax.persistence.*;
-import zad_inventory.entity.TipoUsuario;
 
 
 @Entity
