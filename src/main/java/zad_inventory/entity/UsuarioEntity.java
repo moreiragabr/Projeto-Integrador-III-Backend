@@ -35,6 +35,14 @@ public class UsuarioEntity {
         this.tipoUsuario = tipoUsuario;
     }
 
+    @Override
+    public String toString() {
+        return "ID: " + id +
+                ", Nome: " + nome +
+                ", Email: " + email +
+                ", Tipo: " + tipoUsuario;
+    }
+
     // Getters e Setters
 
     public boolean isGerente() {
