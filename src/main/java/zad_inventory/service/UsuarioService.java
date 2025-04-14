@@ -1,14 +1,14 @@
 package zad_inventory.service;
 
 import zad_inventory.entity.UsuarioEntity;
-import zad_inventory.entity.UsuarioEntity.TipoUsuario;
+import zad_inventory.enums.TipoUsuario;
 import zad_inventory.repository.UsuarioRepository;
 
 import java.util.List;
 
 public class UsuarioService {
 
-    private final UsuarioRepository usuarioRepo;
+    private UsuarioRepository usuarioRepo;
 
     public UsuarioService(UsuarioRepository usuarioRepo) {
         this.usuarioRepo = usuarioRepo;
@@ -30,6 +30,13 @@ public class UsuarioService {
         if (usuario != null) {
             usuarioRepo.remover(usuario);
         }
+    }
+
+    public UsuarioEntity buscarPorId(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID inválido para busca de usuário");
+        }
+        return usuarioRepo.buscarPorId(id);
     }
 
     public List<UsuarioEntity> listarUsuarios() {
