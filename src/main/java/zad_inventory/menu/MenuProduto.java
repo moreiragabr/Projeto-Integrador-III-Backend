@@ -54,7 +54,20 @@ public class MenuProduto {
                     if (produtos.isEmpty()) {
                         System.out.println("Nenhum produto encontrado.");
                     } else {
-                        produtos.forEach(System.out::println);
+                        System.out.printf("\n%-4s %-20s %-10s %-10s %-10s %-10s\n",
+                                "ID", "Nome", "Qtd", "Categoria", "Cor", "Tamanho");
+                        System.out.println("---------------------------------------------------------------");
+
+                        for (ProdutoEntity p : produtos) {
+                            System.out.printf("%-4d %-20s %-10d %-10d %-10s %-10s\n",
+                                    p.getId(),
+                                    p.getNomeProduto(),
+                                    p.getQuantidade(),
+                                    p.getCategoriaId(),
+                                    p.getCor(),
+                                    p.getTamanho()
+                            );
+                        }
                     }
                 }
                 case 3 -> {
