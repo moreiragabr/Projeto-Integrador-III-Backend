@@ -8,8 +8,8 @@ public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
 
-    public ProdutoService() {
-        this.produtoRepository = new ProdutoRepository();
+    public ProdutoService(ProdutoRepository produtoRepository) {
+        this.produtoRepository = produtoRepository;
     }
 
     // Salvar ou atualizar produto

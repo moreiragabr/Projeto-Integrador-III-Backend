@@ -2,6 +2,7 @@ package zad_inventory.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import zad_inventory.enums.Situacao;
 
 @Entity
 @Table(name = "operacao")
@@ -23,8 +24,9 @@ public class OperacaoEntity {
     @Column(name = "usuario_nome")
     private String usuarioNome;
 
-    @Column(name = "fk_situacao")
-    private String situacao;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "situacao", nullable = false)
+    private Situacao situacao;
 
     @Column(name = "quantidade")
     private int quantidade;
@@ -34,7 +36,7 @@ public class OperacaoEntity {
 
     public OperacaoEntity() {}
 
-    public OperacaoEntity(Long id, int produtoId, String produtoNome, int usuarioId, String usuarioNome, String situacao, int quantidade, LocalDateTime data) {
+    public OperacaoEntity(Long id, int produtoId, String produtoNome, int usuarioId, String usuarioNome, Situacao situacao, int quantidade, LocalDateTime data) {
         this.id = id;
         this.produtoId = produtoId;
         this.produtoNome = produtoNome;
@@ -44,6 +46,7 @@ public class OperacaoEntity {
         this.quantidade = quantidade;
         this.data = data;
     }
+
 
     @Override
     public String toString() {
@@ -60,6 +63,8 @@ public class OperacaoEntity {
     }
 
     // Getters e Setters
+
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -75,8 +80,8 @@ public class OperacaoEntity {
     public String getUsuarioNome() { return usuarioNome; }
     public void setUsuarioNome(String usuarioNome) { this.usuarioNome = usuarioNome; }
 
-    public String getSituacao() { return situacao; }
-    public void setSituacao(String situacao) { this.situacao = situacao; }
+    public Situacao getSituacao() { return situacao; }
+    public void setSituacao(Situacao situacao) { this.situacao = situacao; }
 
     public int getQuantidade() { return quantidade; }
     public void setQuantidade(int quantidade) { this.quantidade = quantidade; }

@@ -1,35 +1,46 @@
 package zad_inventory.entity;
 
 import javax.persistence.*;
+import zad_inventory.enums.TipoUsuario;
 
 
 @Entity
 @Table(name = "usuarios")
 public class UsuarioEntity {
 
-    public enum TipoUsuario {
-        FUNCIONARIO,
-        GERENTE
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "senha", nullable = false)
     private String senha;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "tipo_usuario", nullable = false)
     private TipoUsuario tipoUsuario;
 
+    public UsuarioEntity() {}
+
+    public UsuarioEntity(String nome, String email, String senha, TipoUsuario tipoUsuario) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.tipoUsuario = tipoUsuario;
+    }
+
     // Getters e Setters
+
+    public boolean isGerente() {
+        return tipoUsuario == TipoUsuario.GERENTE;
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

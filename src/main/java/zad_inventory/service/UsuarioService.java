@@ -1,7 +1,7 @@
 package zad_inventory.service;
 
 import zad_inventory.entity.UsuarioEntity;
-import zad_inventory.entity.UsuarioEntity.TipoUsuario;
+import zad_inventory.enums.TipoUsuario;
 import zad_inventory.repository.UsuarioRepository;
 
 import java.util.List;

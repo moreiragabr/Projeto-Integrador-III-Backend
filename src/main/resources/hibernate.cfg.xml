@@ -9,7 +9,7 @@
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
         <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/zad_inventory</property>
         <property name="hibernate.connection.username">postgres</property>
-        <property name="hibernate.connection.password">98187637</property>
+        <property name="hibernate.connection.password">postgres</property>
 
         <!-- Dialeto específico do PostgreSQL -->
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
