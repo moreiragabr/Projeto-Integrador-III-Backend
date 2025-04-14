@@ -36,8 +36,21 @@ public class ProdutoService {
         if (id == null) {
             throw new IllegalArgumentException("ID não pode ser nulo");
         }
+
+        ProdutoEntity produto = produtoRepository.findById(id);
+        if (produto == null) {
+            throw new RuntimeException("❌ Produto não encontrado.");
+        }
+
+        int totalOperacoes = produtoRepository.countOperacoesVinculadas(id);
+        if (totalOperacoes > 0) {
+            throw new RuntimeException("❌ Este produto possui vendas registradas e não pode ser excluído.");
+        }
+
         produtoRepository.delete(id);
+        System.out.println("✅ Produto excluído com sucesso.");
     }
+
 
     public int contarProdutosPorCategoria(int categoriaId) {
         if (categoriaId <= 0) {

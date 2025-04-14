@@ -2,8 +2,7 @@ package zad_inventory.menu;
 
 import zad_inventory.entity.UsuarioEntity;
 import zad_inventory.enums.TipoUsuario;
-import zad_inventory.menu.MenuAdmin;
-import zad_inventory.menu.MenuFuncionario;
+
 
 public class MenuPrincipal {
 

@@ -94,4 +94,13 @@ public class ProdutoRepository {
     public void close() {
         em.close();
     }
+
+    public int countOperacoesVinculadas(Long produtoId) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(o) FROM OperacaoEntity o WHERE o.produto.id = :produtoId",
+                Long.class
+        );
+        query.setParameter("produtoId", produtoId);
+        return query.getSingleResult().intValue();
+    }
 }

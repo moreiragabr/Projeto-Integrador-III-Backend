@@ -22,7 +22,7 @@ public class MenuCategorias {
             System.out.println("2. Listar categorias");
             System.out.println("3. Atualizar categoria");
             System.out.println("4. Remover categoria");
-            System.out.println("5. Sair");
+            System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
             int opcao = scanner.nextInt();
@@ -76,7 +76,7 @@ public class MenuCategorias {
                         System.out.println("❌ Categoria não encontrada.");
                     }
                 }
-                case 5 -> executando = false;
+                case 0 -> executando = false;
                 default -> System.out.println("❌ Opção inválida.");
             }
         }

@@ -28,10 +28,10 @@ public class MenuProduto {
             System.out.println("6. Buscar por categoria");
             System.out.println("7. Adicionar estoque");
             System.out.println("8. Remover estoque");
-            System.out.println("9. Sair");
+            System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
             int opcao = scanner.nextInt();
-            scanner.nextLine(); // limpar buffer
+            scanner.nextLine();
 
             switch (opcao) {
                 case 1 -> {
@@ -80,8 +80,12 @@ public class MenuProduto {
                 case 4 -> {
                     System.out.print("ID do produto a excluir: ");
                     Long id = scanner.nextLong();
-                    produtoService.deletarProduto(id);
-                    System.out.println("✅ Produto excluído.");
+                    try {
+                        produtoService.deletarProduto(id);
+                        System.out.println("✅ Produto excluído.");
+                    } catch (RuntimeException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
                 case 5 -> {
                     System.out.print("Nome do produto: ");
@@ -119,7 +123,7 @@ public class MenuProduto {
                     ProdutoEntity atualizado = produtoService.removerEstoque(id, qtd);
                     System.out.println("✅ Estoque atualizado: " + atualizado.getQuantidade());
                 }
-                case 9 -> {
+                case 0 -> {
                     executando = false;
                 }
                 default -> System.out.println("❌ Opção inválida.");

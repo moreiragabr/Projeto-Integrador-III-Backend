@@ -28,7 +28,7 @@ public class MenuOperacao {
             System.out.println("2. Listar todas as operações");
             System.out.println("3. Alterar situação de uma operação");
             System.out.println("4. Buscar por situação");
-            System.out.println("5. Sair");
+            System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
             int opcao = scanner.nextInt();
@@ -114,7 +114,7 @@ public class MenuOperacao {
                     }
                 }
 
-                case 5 -> executando = false;
+                case 0 -> executando = false;
 
                 default -> System.out.println("❌ Opção inválida.");
             }
