@@ -2,9 +2,12 @@ package zad_inventory.menu;
 
 import zad_inventory.config.DBConnection;
 import zad_inventory.entity.OperacaoEntity;
+import zad_inventory.entity.ProdutoEntity;
 import zad_inventory.entity.UsuarioEntity;
 import zad_inventory.enums.Situacao;
 import zad_inventory.repository.OperacaoRepository;
+import zad_inventory.repository.ProdutoRepository;
+import zad_inventory.service.ProdutoService;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
@@ -15,6 +18,7 @@ public class MenuOperacao {
     public static void Operacoes(UsuarioEntity usuarioLogado) {
         EntityManager em = DBConnection.getEntityManager();
         OperacaoRepository repo = new OperacaoRepository(em);
+        ProdutoService produtoService = new ProdutoService(new ProdutoRepository(em));
         Scanner scanner = new Scanner(System.in);
         boolean executando = true;
 
@@ -32,25 +36,39 @@ public class MenuOperacao {
 
             switch (opcao) {
                 case 1 -> {
-                    OperacaoEntity nova = new OperacaoEntity();
                     System.out.print("ID do produto: ");
-                    nova.setProdutoId(scanner.nextInt());
+                    Long produtoId = scanner.nextLong();
                     scanner.nextLine();
-                    System.out.print("Nome do produto: ");
-                    nova.setProdutoNome(scanner.nextLine());
-                    System.out.print("ID do usuário: ");
-                    nova.setUsuarioId(scanner.nextInt());
-                    scanner.nextLine();
-                    System.out.print("Nome do usuário: ");
-                    nova.setUsuarioNome(scanner.nextLine());
+
+                    ProdutoEntity produto = produtoService.buscarPorId(produtoId);
+                    if (produto == null) {
+                        System.out.println("❌ Produto não encontrado.");
+                        break;
+                    }
+
                     System.out.print("Quantidade: ");
-                    nova.setQuantidade(scanner.nextInt());
+                    int quantidade = scanner.nextInt();
                     scanner.nextLine();
+
+                    if (produto.getQuantidade() < quantidade) {
+                        System.out.println("❌ Estoque insuficiente. Estoque atual: " + produto.getQuantidade());
+                        break;
+                    }
+
+                    produto.setQuantidade(produto.getQuantidade() - quantidade);
+                    produtoService.salvarProduto(produto);
+
+                    OperacaoEntity nova = new OperacaoEntity();
+                    nova.setProduto(produto);
+                    nova.setUsuario(usuarioLogado);
+                    nova.setQuantidade(quantidade);
                     nova.setSituacao(Situacao.REALIZADA);
                     nova.setData(LocalDateTime.now());
+
                     repo.save(nova);
                     System.out.println("✅ Venda registrada!");
                 }
+
                 case 2 -> {
                     List<OperacaoEntity> operacoes = repo.listAll();
                     if (operacoes.isEmpty()) {
@@ -59,6 +77,7 @@ public class MenuOperacao {
                         operacoes.forEach(System.out::println);
                     }
                 }
+
                 case 3 -> {
                     System.out.print("ID da operação para alterar: ");
                     Long id = scanner.nextLong();
@@ -78,6 +97,7 @@ public class MenuOperacao {
                         System.out.println("❌ Operação não encontrada.");
                     }
                 }
+
                 case 4 -> {
                     System.out.print("Situação para filtrar (REALIZADA, CANCELADA, SEPARADA): ");
                     String filtro = scanner.nextLine().toUpperCase();
@@ -93,7 +113,9 @@ public class MenuOperacao {
                         System.out.println("❌ Situação inválida.");
                     }
                 }
+
                 case 5 -> executando = false;
+
                 default -> System.out.println("❌ Opção inválida.");
             }
         }
