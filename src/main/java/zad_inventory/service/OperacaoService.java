@@ -1,6 +1,7 @@
 package zad_inventory.service;
 
 import zad_inventory.entity.OperacaoEntity;
+import zad_inventory.enums.Situacao;
 import zad_inventory.repository.OperacaoRepository;
 
 import java.time.LocalDate;
@@ -34,7 +35,6 @@ public class OperacaoService {
         operacaoRepository.update(operacao);
     }
 
-
     public void deleteOperation(OperacaoEntity operacao) {
         operacaoRepository.delete(operacao);
     }
@@ -43,7 +43,7 @@ public class OperacaoService {
     public void cancelOperation(Long id) {
         OperacaoEntity op = operacaoRepository.findById(id);
         if (op != null) {
-            op.setSituacao("Cancelada");
+            op.setSituacao(Situacao.CANCELADA);
             operacaoRepository.update(op);
         }
     }
@@ -64,7 +64,7 @@ public class OperacaoService {
     }
 
     //CONSULTA POR SITUAÇÃO
-    public List<OperacaoEntity> listBySituacao(String situacao) {
+    public List<OperacaoEntity> listBySituacao(Situacao situacao) {
         return operacaoRepository.findBySituacao(situacao);
     }
 }

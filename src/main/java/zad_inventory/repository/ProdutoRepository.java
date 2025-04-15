@@ -11,12 +11,10 @@ import java.util.List;
 
 public class ProdutoRepository {
 
-    private final EntityManagerFactory emf;
     private final EntityManager em;
 
-    public ProdutoRepository() {
-        this.emf = Persistence.createEntityManagerFactory("zad_inventory");
-        this.em = emf.createEntityManager();
+    public ProdutoRepository(EntityManager em) {
+        this.em = em;
     }
 
     // Salvar ou atualizar produto
@@ -95,6 +93,15 @@ public class ProdutoRepository {
     // Fechar EntityManager
     public void close() {
         em.close();
-        emf.close();
     }
+
+    public int countOperacoesVinculadas(Long produtoId) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(o) FROM OperacaoEntity o WHERE o.produto.id = :produtoId",
+                Long.class
+        );
+        query.setParameter("produtoId", produtoId);
+        return query.getSingleResult().intValue();
+    }
+
 }

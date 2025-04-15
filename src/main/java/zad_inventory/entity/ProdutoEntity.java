@@ -19,6 +19,9 @@ public class ProdutoEntity {
     @Column(name = "fk_categoria_id")
     private int categoriaId; //public classe variavel
 
+    @Column(name = "fk_usuario_id")
+    private Long usuarioId; //public classe variavel
+
     @Column(name = "cor")
     private String cor;
 
@@ -27,11 +30,12 @@ public class ProdutoEntity {
 
     public ProdutoEntity() {}
 
-    public ProdutoEntity(Long id, String nomeProduto, int quantidade, int categoriaId, String cor, String tamanho) {
+    public ProdutoEntity(Long id, String nomeProduto, int quantidade, int categoriaId, Long usuarioId, String cor, String tamanho) {
         this.id = id;
         this.nomeProduto = nomeProduto;
         this.quantidade = quantidade;
         this.categoriaId = categoriaId;
+        this.usuarioId = usuarioId;
         this.cor = cor;
         this.tamanho = tamanho;
     }
@@ -43,6 +47,7 @@ public class ProdutoEntity {
                 ", nomeProduto='" + nomeProduto + '\'' +
                 ", quantidade=" + quantidade +
                 ", categoriaId=" + categoriaId +
+                ", usuarioId=" + usuarioId +
                 ", cor='" + cor + '\'' +
                 ", tamanho='" + tamanho + '\'' +
                 '}';
@@ -60,6 +65,9 @@ public class ProdutoEntity {
 
     public int getCategoriaId() { return categoriaId; }
     public void setCategoriaId(int categoriaId) { this.categoriaId = categoriaId; }
+
+    public Long getUsuarioId() { return usuarioId; }
+    public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
 
     public String getCor() { return cor; }
     public void setCor(String cor) { this.cor = cor; }

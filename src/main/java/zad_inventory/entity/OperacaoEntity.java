@@ -2,6 +2,7 @@ package zad_inventory.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import zad_inventory.enums.Situacao;
 
 @Entity
 @Table(name = "operacao")
@@ -11,35 +12,29 @@ public class OperacaoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "fk_produto_id")
-    private int produtoId;
+    @ManyToOne
+    @JoinColumn(name = "fk_produto_id", nullable = false)
+    private ProdutoEntity produto;
 
-    @Column(name = "produto_nome")
-    private String produtoNome;
+    @ManyToOne
+    @JoinColumn(name = "fk_usuario_id", nullable = false)
+    private UsuarioEntity usuario;
 
-    @Column(name = "fk_usuario_id")
-    private int usuarioId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "situacao", nullable = false)
+    private Situacao situacao;
 
-    @Column(name = "usuario_nome")
-    private String usuarioNome;
-
-    @Column(name = "fk_situacao")
-    private String situacao;
-
-    @Column(name = "quantidade")
+    @Column(name = "quantidade", nullable = false)
     private int quantidade;
 
-    @Column(name = "data")
+    @Column(name = "data", nullable = false)
     private LocalDateTime data;
 
     public OperacaoEntity() {}
 
-    public OperacaoEntity(Long id, int produtoId, String produtoNome, int usuarioId, String usuarioNome, String situacao, int quantidade, LocalDateTime data) {
-        this.id = id;
-        this.produtoId = produtoId;
-        this.produtoNome = produtoNome;
-        this.usuarioId = usuarioId;
-        this.usuarioNome = usuarioNome;
+    public OperacaoEntity(ProdutoEntity produto, UsuarioEntity usuario, Situacao situacao, int quantidade, LocalDateTime data) {
+        this.produto = produto;
+        this.usuario = usuario;
         this.situacao = situacao;
         this.quantidade = quantidade;
         this.data = data;
@@ -49,38 +44,37 @@ public class OperacaoEntity {
     public String toString() {
         return "OperacaoEntity{" +
                 "id=" + id +
-                ", produtoId=" + produtoId +
-                ", produtoNome='" + produtoNome + '\'' +
-                ", usuarioId=" + usuarioId +
-                ", usuarioNome='" + usuarioNome + '\'' +
-                ", situacao='" + situacao + '\'' +
+                ", produto=" + produto.getNomeProduto() +
+                ", usuario=" + usuario.getNome() +
+                ", situacao=" + situacao +
                 ", quantidade=" + quantidade +
                 ", data=" + data +
                 '}';
     }
 
     // Getters e Setters
+
     public Long getId() { return id; }
+
     public void setId(Long id) { this.id = id; }
 
-    public int getProdutoId() { return produtoId; }
-    public void setProdutoId(int produtoId) { this.produtoId = produtoId; }
+    public ProdutoEntity getProduto() { return produto; }
 
-    public String getProdutoNome() { return produtoNome; }
-    public void setProdutoNome(String produtoNome) { this.produtoNome = produtoNome; }
+    public void setProduto(ProdutoEntity produto) { this.produto = produto; }
 
-    public int getUsuarioId() { return usuarioId; }
-    public void setUsuarioId(int usuarioId) { this.usuarioId = usuarioId; }
+    public UsuarioEntity getUsuario() { return usuario; }
 
-    public String getUsuarioNome() { return usuarioNome; }
-    public void setUsuarioNome(String usuarioNome) { this.usuarioNome = usuarioNome; }
+    public void setUsuario(UsuarioEntity usuario) { this.usuario = usuario; }
 
-    public String getSituacao() { return situacao; }
-    public void setSituacao(String situacao) { this.situacao = situacao; }
+    public Situacao getSituacao() { return situacao; }
+
+    public void setSituacao(Situacao situacao) { this.situacao = situacao; }
 
     public int getQuantidade() { return quantidade; }
+
     public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
 
     public LocalDateTime getData() { return data; }
+
     public void setData(LocalDateTime data) { this.data = data; }
 }
