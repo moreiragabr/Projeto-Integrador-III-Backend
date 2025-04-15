@@ -55,16 +55,18 @@ public class MenuProduto {
                     if (produtos.isEmpty()) {
                         System.out.println("Nenhum produto encontrado.");
                     } else {
-                        System.out.printf("\n%-4s %-20s %-10s %-10s %-10s %-10s\n",
-                                "ID", "Nome", "Qtd", "Categoria", "Cor", "Tamanho");
-                        System.out.println("---------------------------------------------------------------");
+                        System.out.printf("\n%-4s %-20s %-10s %-10s %-20s %-20s %-10s %-10s\n",
+                                "ID", "Nome", "Qtd", "Categoria", "Nome Categoria", "Descricao Categoria", "Cor", "Tamanho");
+                        System.out.println("------------------------------------------------------------------------------------------------------------------------------");
 
                         for (ProdutoEntity p : produtos) {
-                            System.out.printf("%-4d %-20s %-10d %-10d %-10s %-10s\n",
+                            System.out.printf("%-4s %-20s %-10s %-10s %-20s %-20s %-10s %-10s\n",
                                     p.getId(),
                                     p.getNomeProduto(),
                                     p.getQuantidade(),
                                     p.getCategoriaId(),
+                                    p.getNomeCategoria(),
+                                    p.getDescricaoCategoria(),
                                     p.getCor(),
                                     p.getTamanho()
                             );

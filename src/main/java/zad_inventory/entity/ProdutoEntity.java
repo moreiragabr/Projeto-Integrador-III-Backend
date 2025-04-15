@@ -1,5 +1,7 @@
 package zad_inventory.entity;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,6 +17,12 @@ public class ProdutoEntity {
 
     @Column(name = "quantidade")
     private int quantidade;
+
+    @Formula("(SELECT c.nome FROM categoria c WHERE c.id = fk_categoria_id)")
+    private String nomeCategoria;
+
+    @Formula("(SELECT c.descricao FROM categoria c WHERE c.id = fk_categoria_id)")
+    private String descricaoCategoria;
 
     @Column(name = "fk_categoria_id")
     private int categoriaId; //public classe variavel
@@ -47,6 +55,8 @@ public class ProdutoEntity {
                 ", nomeProduto='" + nomeProduto + '\'' +
                 ", quantidade=" + quantidade +
                 ", categoriaId=" + categoriaId +
+                ", nomeCategoria=" + nomeCategoria +
+                ", descricaoCategoria=" + descricaoCategoria +
                 ", usuarioId=" + usuarioId +
                 ", cor='" + cor + '\'' +
                 ", tamanho='" + tamanho + '\'' +
@@ -74,4 +84,13 @@ public class ProdutoEntity {
 
     public String getTamanho() { return tamanho; }
     public void setTamanho(String tamanho) { this.tamanho = tamanho; }
+
+    public String getNomeCategoria() {
+        return nomeCategoria;
+    }
+
+    public String getDescricaoCategoria() {
+        return descricaoCategoria;
+    }
+
 }
