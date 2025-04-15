@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Configurações do PostgreSQL -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/zad_inventory</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">postgres</property>
+
+        <!-- Dialeto específico do PostgreSQL -->
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <!-- Configurações gerais do Hibernate -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">update</property> <!-- update, create, validate, create-drop -->
+
+        <!-- Mapeamento das entidades -->
+        <!-- Adicione suas classes de entidade aqui -->
+        <mapping class="zad_inventory.entity.CategoriaEntity"/>
+        <mapping class="zad_inventory.entity.ProdutoEntity"/>
+        <mapping class="zad_inventory.entity.SituacaoEntity"/>
+        <mapping class="zad_inventory.entity.OperacaoEntity"/>
+        <mapping class="zad_inventory.entity.UsuarioEntity"/>
+    </session-factory>
+</hibernate-configuration>
