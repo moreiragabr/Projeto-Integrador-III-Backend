@@ -40,4 +40,6 @@ public class UsuarioRepository {
     public List<UsuarioEntity> listarTodos() {
         return em.createQuery("SELECT u FROM UsuarioEntity u", UsuarioEntity.class).getResultList();
     }
+
+
 }

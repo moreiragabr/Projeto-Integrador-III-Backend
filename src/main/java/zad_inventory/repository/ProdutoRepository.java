@@ -1,6 +1,8 @@
 package zad_inventory.repository;
 
 import zad_inventory.entity.ProdutoEntity;
+import zad_inventory.entity.UsuarioEntity;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -9,12 +11,10 @@ import java.util.List;
 
 public class ProdutoRepository {
 
-    private final EntityManagerFactory emf;
     private final EntityManager em;
 
-    public ProdutoRepository() {
-        this.emf = Persistence.createEntityManagerFactory("zad_inventory");
-        this.em = emf.createEntityManager();
+    public ProdutoRepository(EntityManager em) {
+        this.em = em;
     }
 
     // Salvar ou atualizar produto
@@ -36,8 +36,9 @@ public class ProdutoRepository {
 
     // Listar todos
     public List<ProdutoEntity> findAll() {
-        TypedQuery<ProdutoEntity> query = em.createQuery("SELECT p FROM ProdutoEntity p", ProdutoEntity.class);
-        return query.getResultList();
+    //    TypedQuery<ProdutoEntity> query = em.createQuery("SELECT p FROM ProdutoEntity p", ProdutoEntity.class);
+        return em.createQuery("SELECT p FROM ProdutoEntity p", ProdutoEntity.class).getResultList();
+    //    return query.getResultList();
     }
 
     // Deletar produto
@@ -74,6 +75,13 @@ public class ProdutoRepository {
         return query.getResultList();
     }
 
+    public int countByCategoriaId(int categoriaId) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(p) FROM ProdutoEntity p WHERE p.categoriaId = :categoriaId", Long.class);
+        query.setParameter("categoriaId", categoriaId);
+        return query.getSingleResult().intValue();
+    }
+
     // Buscar por tamanho
     public List<ProdutoEntity> findByTamanho(String tamanho) {
         TypedQuery<ProdutoEntity> query = em.createQuery(
@@ -85,6 +93,15 @@ public class ProdutoRepository {
     // Fechar EntityManager
     public void close() {
         em.close();
-        emf.close();
     }
+
+    public int countOperacoesVinculadas(Long produtoId) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(o) FROM OperacaoEntity o WHERE o.produto.id = :produtoId",
+                Long.class
+        );
+        query.setParameter("produtoId", produtoId);
+        return query.getSingleResult().intValue();
+    }
+
 }

@@ -1,6 +1,7 @@
 package zad_inventory.repository;
 
 import zad_inventory.entity.OperacaoEntity;
+import zad_inventory.enums.Situacao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -81,10 +82,10 @@ public class OperacaoRepository {
     }
 
     //CONSULTA POR SITUAÇÃO
-    public List<OperacaoEntity> findBySituacao(String situacao) {
+    public List<OperacaoEntity> findBySituacao(Situacao situacao) {
         TypedQuery<OperacaoEntity> query = em.createQuery(
-                "SELECT o FROM OperacaoEntity o WHERE LOWER(o.situacao) = LOWER(:sit)", OperacaoEntity.class);
-        query.setParameter("sit", situacao);
+                "SELECT o FROM OperacaoEntity o WHERE o.situacao = :situacao", OperacaoEntity.class);
+        query.setParameter("situacao", situacao);
         return query.getResultList();
     }
 
