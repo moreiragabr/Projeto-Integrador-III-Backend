@@ -4,6 +4,7 @@ import zad_inventory.config.DBConnection;
 import zad_inventory.entity.ProdutoEntity;
 import zad_inventory.entity.UsuarioEntity;
 import zad_inventory.repository.ProdutoRepository;
+import zad_inventory.repository.CategoriaRepository;
 import zad_inventory.service.ProdutoService;
 
 import java.util.List;
@@ -12,9 +13,12 @@ import java.util.Scanner;
 public class MenuProduto {
 
     public static void exibir(UsuarioEntity usuarioLogado) {
+        // Inicialização correta com ambos repositórios
         ProdutoService produtoService = new ProdutoService(
-                new ProdutoRepository(DBConnection.getEntityManager())
+                new ProdutoRepository(DBConnection.getEntityManager()),
+                new CategoriaRepository(DBConnection.getEntityManager()) // Adicionado
         );
+
         Scanner scanner = new Scanner(System.in);
         boolean executando = true;
 
@@ -45,10 +49,17 @@ public class MenuProduto {
                     System.out.print("Quantidade: ");
                     novo.setQuantidade(scanner.nextInt());
                     System.out.print("ID da categoria: ");
-                    novo.setCategoriaId(scanner.nextInt());
+                    Long categoriaId = scanner.nextLong();
+                    scanner.nextLine(); // Limpar buffer
+                    novo.setCategoriaId(categoriaId);
                     novo.setUsuarioId(usuarioLogado.getId());
-                    ProdutoEntity salvo = produtoService.salvarProduto(novo);
-                    System.out.println("✅ Produto salvo: " + salvo);
+
+                    try {
+                        ProdutoEntity salvo = produtoService.salvarProduto(novo);
+                        System.out.println("Produto salvo: " + salvo);
+                    } catch (Exception e) {
+                        System.out.println("Erro ao salvar: " + e.getMessage());
+                    }
                 }
                 case 2 -> {
                     List<ProdutoEntity> produtos = produtoService.listarTodos();
@@ -59,68 +70,90 @@ public class MenuProduto {
                                 "ID", "Nome", "Qtd", "Categoria", "Nome Categoria", "Descricao Categoria", "Cor", "Tamanho");
                         System.out.println("------------------------------------------------------------------------------------------------------------------------------");
 
-                        for (ProdutoEntity p : produtos) {
-                            System.out.printf("%-4s %-20s %-10s %-10s %-20s %-20s %-10s %-10s\n",
+                        produtos.forEach(p -> {
+                            System.out.printf("%-4d %-20s %-10d %-10d %-20s %-20s %-10s %-10s\n",
                                     p.getId(),
                                     p.getNomeProduto(),
                                     p.getQuantidade(),
                                     p.getCategoriaId(),
-                                    p.getNomeCategoria(),
-                                    p.getDescricaoCategoria(),
+                                    p.getNomeCategoria() != null ? p.getNomeCategoria() : "N/A",
+                                    p.getDescricaoCategoria() != null ? p.getDescricaoCategoria() : "N/A",
                                     p.getCor(),
                                     p.getTamanho()
                             );
-                        }
+                        });
                     }
                 }
                 case 3 -> {
                     System.out.print("ID do produto a editar: ");
                     Long idEditar = scanner.nextLong();
                     scanner.nextLine();
-                    ProdutoEntity produto = produtoService.buscarPorId(idEditar);
-                    if (produto == null) {
-                        System.out.println("❌ Produto não encontrado.");
-                        break;
+
+                    try {
+                        ProdutoEntity produto = produtoService.buscarPorId(idEditar);
+                        System.out.print("Novo nome (" + produto.getNomeProduto() + "): ");
+                        produto.setNomeProduto(scanner.nextLine());
+                        System.out.print("Nova cor (" + produto.getCor() + "): ");
+                        produto.setCor(scanner.nextLine());
+                        System.out.print("Novo tamanho (" + produto.getTamanho() + "): ");
+                        produto.setTamanho(scanner.nextLine());
+                        System.out.print("Nova quantidade (" + produto.getQuantidade() + "): ");
+                        produto.setQuantidade(scanner.nextInt());
+                        scanner.nextLine();
+
+                        produtoService.salvarProduto(produto);
+                        System.out.println("Produto atualizado.");
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e.getMessage());
                     }
-                    System.out.print("Novo nome (" + produto.getNomeProduto() + "): ");
-                    produto.setNomeProduto(scanner.nextLine());
-                    System.out.print("Nova cor (" + produto.getCor() + "): ");
-                    produto.setCor(scanner.nextLine());
-                    System.out.print("Novo tamanho (" + produto.getTamanho() + "): ");
-                    produto.setTamanho(scanner.nextLine());
-                    System.out.print("Nova quantidade (" + produto.getQuantidade() + "): ");
-                    produto.setQuantidade(scanner.nextInt());
-                    produtoService.salvarProduto(produto);
-                    System.out.println("✅ Produto atualizado.");
                 }
                 case 4 -> {
                     System.out.print("ID do produto a excluir: ");
                     Long id = scanner.nextLong();
+                    scanner.nextLine();
+
                     try {
                         produtoService.deletarProduto(id);
-                        System.out.println("✅ Produto excluído.");
-                    } catch (RuntimeException e) {
-                        System.out.println(e.getMessage());
+                        System.out.println("Produto excluído.");
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e.getMessage());
                     }
                 }
                 case 5 -> {
                     System.out.print("Nome do produto: ");
                     String nome = scanner.nextLine();
-                    List<ProdutoEntity> encontrados = produtoService.buscarPorNome(nome);
-                    if (encontrados.isEmpty()) {
-                        System.out.println("Nenhum produto encontrado.");
-                    } else {
-                        encontrados.forEach(System.out::println);
+
+                    try {
+                        List<ProdutoEntity> encontrados = produtoService.buscarPorNome(nome);
+                        if (encontrados.isEmpty()) {
+                            System.out.println("Nenhum produto encontrado.");
+                        } else {
+                            encontrados.forEach(p -> System.out.println(
+                                    p.getId() + " | " + p.getNomeProduto() + " | " +
+                                            p.getQuantidade() + " | " + p.getCategoria().getNome()
+                            ));
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Erro na busca: " + e.getMessage());
                     }
                 }
                 case 6 -> {
                     System.out.print("ID da categoria: ");
-                    int categoriaId = scanner.nextInt();
-                    List<ProdutoEntity> encontrados = produtoService.buscarPorCategoria(categoriaId);
-                    if (encontrados.isEmpty()) {
-                        System.out.println("Nenhum produto nesta categoria.");
-                    } else {
-                        encontrados.forEach(System.out::println);
+                    Long categoriaId = scanner.nextLong();
+                    scanner.nextLine();
+
+                    try {
+                        List<ProdutoEntity> encontrados = produtoService.buscarPorCategoria(categoriaId);
+                        if (encontrados.isEmpty()) {
+                            System.out.println("Nenhum produto nesta categoria.");
+                        } else {
+                            System.out.println("Produtos nesta categoria:");
+                            encontrados.forEach(p -> System.out.println(
+                                    "ID: " + p.getId() + " | Nome: " + p.getNomeProduto()
+                            ));
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e.getMessage());
                     }
                 }
                 case 7 -> {
@@ -128,21 +161,33 @@ public class MenuProduto {
                     Long id = scanner.nextLong();
                     System.out.print("Quantidade a adicionar: ");
                     int qtd = scanner.nextInt();
-                    ProdutoEntity atualizado = produtoService.adicionarEstoque(id, qtd);
-                    System.out.println("✅ Estoque atualizado: " + atualizado.getQuantidade());
+                    scanner.nextLine();
+
+                    try {
+                        ProdutoEntity atualizado = produtoService.adicionarEstoque(id, qtd);
+                        System.out.println("Estoque atualizado. Nova quantidade: " + atualizado.getQuantidade());
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e.getMessage());
+                    }
                 }
                 case 8 -> {
                     System.out.print("ID do produto: ");
                     Long id = scanner.nextLong();
                     System.out.print("Quantidade a remover: ");
                     int qtd = scanner.nextInt();
-                    ProdutoEntity atualizado = produtoService.removerEstoque(id, qtd);
-                    System.out.println("✅ Estoque atualizado: " + atualizado.getQuantidade());
+                    scanner.nextLine();
+
+                    try {
+                        ProdutoEntity atualizado = produtoService.removerEstoque(id, qtd);
+                        System.out.println("Estoque atualizado. Nova quantidade: " + atualizado.getQuantidade());
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e.getMessage());
+                    }
                 }
                 case 0 -> {
                     executando = false;
                 }
-                default -> System.out.println("❌ Opção inválida.");
+                default -> System.out.println("Opção inválida.");
             }
         }
 

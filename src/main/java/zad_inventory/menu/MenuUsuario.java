@@ -24,7 +24,7 @@ public class MenuUsuario {
         while (executando) {
             System.out.println("\n========= MENU USUÁRIOS =========");
             System.out.println("1 - Listar Usuários");
-            System.out.println("2 - Rancking de Usuários por Produtos Criados");
+            System.out.println("2 - Ranking de Usuários por Produtos Criados");
             System.out.println("3 - Cadastrar Novo Usuário");
             System.out.println("0 - Voltar");
             System.out.print("Escolha uma opção: ");
@@ -33,10 +33,10 @@ public class MenuUsuario {
 
             switch (opcao) {
                 case "1":
-                    usuarioService.listarUsuarios().forEach(System.out::println);
+                    usuarioService.listarTodos().forEach(System.out::println);
                     break;
                 case "2":
-                    List<UsuarioEntity> ranking = usuarioService.listarRankingUsuariosPorProdutos();
+                    List<UsuarioEntity> ranking = usuarioService.listarRankingUsuarios();
                     System.out.println("\n--- Ranking de Usuários por Produtos Cadastrados ---");
                     int rank = 1;
                     for (UsuarioEntity u : ranking) {
@@ -56,7 +56,7 @@ public class MenuUsuario {
                     executando = false;
                     break;
                 default:
-                    System.out.println("❌ Opção inválida.");
+                    System.out.println(" Opção inválida.");
             }
         }
     }
@@ -78,9 +78,9 @@ public class MenuUsuario {
             TipoUsuario tipoUsuario = TipoUsuario.valueOf(tipo);
             UsuarioEntity novoUsuario = new UsuarioEntity(nome, email, senha, tipoUsuario);
             usuarioService.registrarUsuario(novoUsuario, usuarioLogado);
-            System.out.println("✅ Usuário cadastrado com sucesso.");
+            System.out.println(" Usuário cadastrado com sucesso.");
         } catch (IllegalArgumentException e) {
-            System.out.println("❌ Tipo de usuário inválido. Use GERENTE ou FUNCIONARIO.");
+            System.out.println(" Tipo de usuário inválido. Use GERENTE ou FUNCIONARIO.");
         }
     }
 }
