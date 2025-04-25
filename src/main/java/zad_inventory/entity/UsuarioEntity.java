@@ -25,9 +25,8 @@ public class UsuarioEntity {
     @Column(name = "tipo_usuario", nullable = false)
     private TipoUsuario tipoUsuario;
 
-    // Campo para armazenar o total (não persistido no banco)
-    @Transient
-    private Long totalProdutos;
+    @Column
+    private Long totalprodutos;
 
     // Relação One-to-Many com Produto
     @OneToMany(mappedBy = "usuario")
@@ -73,11 +72,11 @@ public class UsuarioEntity {
     public void setProdutos(List<ProdutoEntity> produtos) { this.produtos = produtos; }
 
     public Long getTotalProdutos() {
-        return totalProdutos != null ? totalProdutos : calcularTotalProdutos();
+        return totalprodutos != null ? totalprodutos : calcularTotalProdutos();
     }
 
     public void setTotalProdutos(Long totalProdutos) {
-        this.totalProdutos = totalProdutos;
+        this.totalprodutos = totalProdutos;
     }
 
     @Override
@@ -85,7 +84,6 @@ public class UsuarioEntity {
         return "ID: " + id +
                 ", Nome: " + nome +
                 ", Email: " + email +
-                ", Tipo: " + tipoUsuario +
-                ", Total de Produtos: " + getTotalProdutos();
+                ", Tipo: " + tipoUsuario;
     }
 }

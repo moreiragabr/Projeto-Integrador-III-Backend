@@ -60,20 +60,24 @@ public class UsuarioRepository {
                 .getResultList();
     }
 
-    // Listar com contagem de produtos (substitui o @Formula)
     public List<UsuarioEntity> listarComTotalProdutos() {
-        return em.createQuery(
+        List<Object[]> resultados = em.createQuery(
                         "SELECT u, COUNT(p) as total " +
                                 "FROM UsuarioEntity u LEFT JOIN u.produtos p " +
-                                "GROUP BY u",
-                        Object[].class)
-                .getResultList()
-                .stream()
-                .map(result -> {
-                    UsuarioEntity usuario = (UsuarioEntity) result[0];
-                    usuario.setTotalProdutos((Long) result[1]); // ← Agora funciona!
-                    return usuario;
-                })
-                .collect(Collectors.toList());
+                                "GROUP BY u", Object[].class)
+                .getResultList();
+
+        em.getTransaction().begin();
+
+        List<UsuarioEntity> usuarios = resultados.stream().map(result -> {
+            UsuarioEntity usuario = (UsuarioEntity) result[0];
+            Long total = (Long) result[1];
+            usuario.setTotalProdutos(total);
+            return em.merge(usuario); // Salva no banco!
+        }).collect(Collectors.toList());
+
+        em.getTransaction().commit();
+
+        return usuarios;
     }
 }
