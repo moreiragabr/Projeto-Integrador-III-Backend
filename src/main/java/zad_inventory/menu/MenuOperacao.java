@@ -5,6 +5,7 @@ import zad_inventory.entity.OperacaoEntity;
 import zad_inventory.entity.ProdutoEntity;
 import zad_inventory.entity.UsuarioEntity;
 import zad_inventory.enums.Situacao;
+import zad_inventory.repository.CategoriaRepository;
 import zad_inventory.repository.OperacaoRepository;
 import zad_inventory.repository.ProdutoRepository;
 import zad_inventory.service.ProdutoService;
@@ -18,9 +19,16 @@ public class MenuOperacao {
     public static void Operacoes(UsuarioEntity usuarioLogado) {
         EntityManager em = DBConnection.getEntityManager();
         OperacaoRepository repo = new OperacaoRepository(em);
-        ProdutoService produtoService = new ProdutoService(new ProdutoRepository(em));
+
+        ProdutoService produtoService = new ProdutoService(
+                new ProdutoRepository(em),  // Repositório de produtos
+                new CategoriaRepository(em) // Novo: Repositório de categorias
+        );
+
         Scanner scanner = new Scanner(System.in);
         boolean executando = true;
+        // ... resto do código
+
 
         while (executando) {
             System.out.println("\n--- MENU DE OPERAÇÕES ---");
@@ -42,7 +50,7 @@ public class MenuOperacao {
 
                     ProdutoEntity produto = produtoService.buscarPorId(produtoId);
                     if (produto == null) {
-                        System.out.println("❌ Produto não encontrado.");
+                        System.out.println(" Produto não encontrado.");
                         break;
                     }
 
@@ -51,7 +59,7 @@ public class MenuOperacao {
                     scanner.nextLine();
 
                     if (produto.getQuantidade() < quantidade) {
-                        System.out.println("❌ Estoque insuficiente. Estoque atual: " + produto.getQuantidade());
+                        System.out.println(" Estoque insuficiente. Estoque atual: " + produto.getQuantidade());
                         break;
                     }
 
@@ -66,7 +74,7 @@ public class MenuOperacao {
                     nova.setData(LocalDateTime.now());
 
                     repo.save(nova);
-                    System.out.println("✅ Venda registrada!");
+                    System.out.println(" Venda registrada!");
                 }
 
                 case 2 -> {
@@ -89,12 +97,12 @@ public class MenuOperacao {
                         try {
                             op.setSituacao(Situacao.valueOf(novaSituacao));
                             repo.update(op);
-                            System.out.println("✅ Situação atualizada.");
+                            System.out.println(" Situação atualizada.");
                         } catch (IllegalArgumentException e) {
-                            System.out.println("❌ Situação inválida.");
+                            System.out.println(" Situação inválida.");
                         }
                     } else {
-                        System.out.println("❌ Operação não encontrada.");
+                        System.out.println(" Operação não encontrada.");
                     }
                 }
 
@@ -110,13 +118,13 @@ public class MenuOperacao {
                             resultado.forEach(System.out::println);
                         }
                     } catch (Exception e) {
-                        System.out.println("❌ Situação inválida.");
+                        System.out.println(" Situação inválida.");
                     }
                 }
 
                 case 0 -> executando = false;
 
-                default -> System.out.println("❌ Opção inválida.");
+                default -> System.out.println(" Opção inválida.");
             }
         }
 

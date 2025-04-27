@@ -36,7 +36,7 @@ public class MenuCategorias {
                     String descricao = scanner.nextLine();
                     CategoriaEntity nova = new CategoriaEntity(nome, descricao);
                     repo.salvar(nova);
-                    System.out.println("✅ Categoria cadastrada com sucesso!");
+                    System.out.println(" Categoria cadastrada com sucesso!");
                 }
                 case 2 -> {
                     List<CategoriaEntity> categorias = repo.buscarTodos();
@@ -59,25 +59,31 @@ public class MenuCategorias {
                         existente.setNome(novoNome);
                         existente.setDescricao(novaDesc);
                         repo.atualizar(existente);
-                        System.out.println("✅ Categoria atualizada!");
+                        System.out.println(" Categoria atualizada!");
                     } else {
-                        System.out.println("❌ Categoria não encontrada.");
+                        System.out.println(" Categoria não encontrada.");
                     }
                 }
                 case 4 -> {
                     System.out.print("ID da categoria para remover: ");
                     Long id = scanner.nextLong();
-                    scanner.nextLine();
-                    CategoriaEntity categoria = repo.buscarPorId(id);
-                    if (categoria != null) {
-                        repo.remover(categoria);
-                        System.out.println("✅ Categoria removida com sucesso!");
-                    } else {
-                        System.out.println("❌ Categoria não encontrada.");
+                    scanner.nextLine(); // Limpar buffer
+
+                    try {
+                        CategoriaEntity categoria = repo.buscarPorId(id);
+                        if (categoria != null) {
+                            // Versão mais robusta da remoção
+                            repo.remover(categoria);
+                            System.out.println("✅ Categoria removida com sucesso!");
+                        } else {
+                            System.out.println("❌ Categoria não encontrada.");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("❌ Erro ao remover: " + e.getMessage());
                     }
                 }
                 case 0 -> executando = false;
-                default -> System.out.println("❌ Opção inválida.");
+                default -> System.out.println(" Opção inválida.");
             }
         }
 

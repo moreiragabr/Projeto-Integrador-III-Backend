@@ -1,15 +1,12 @@
 package zad_inventory.entity;
 
 import javax.persistence.*;
-
-import org.hibernate.annotations.Formula;
+import java.util.List;
 import zad_inventory.enums.TipoUsuario;
-
 
 @Entity
 @Table(name = "usuarios")
 public class UsuarioEntity {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,13 +25,14 @@ public class UsuarioEntity {
     @Column(name = "tipo_usuario", nullable = false)
     private TipoUsuario tipoUsuario;
 
-    @Formula("(SELECT COUNT(p.id) FROM produto p WHERE p.fk_usuario_id = id)")
-    private Long totalProdutos;
+    @Column
+    private Long totalprodutos;
 
-    public Long getTotalProdutos() {
-        return totalProdutos;
-    }
+    // Relação One-to-Many com Produto
+    @OneToMany(mappedBy = "usuario")
+    private List<ProdutoEntity> produtos;
 
+    // Construtores
     public UsuarioEntity() {}
 
     public UsuarioEntity(String nome, String email, String senha, TipoUsuario tipoUsuario) {
@@ -44,20 +42,17 @@ public class UsuarioEntity {
         this.tipoUsuario = tipoUsuario;
     }
 
-    @Override
-    public String toString() {
-        return "ID: " + id +
-                ", Nome: " + nome +
-                ", Email: " + email +
-                ", Tipo: " + tipoUsuario;
-    }
-
-    // Getters e Setters
-
+    // Métodos de negócio
     public boolean isGerente() {
         return tipoUsuario == TipoUsuario.GERENTE;
     }
 
+    // Calcula o total dinamicamente (se necessário)
+    public Long calcularTotalProdutos() {
+        return produtos != null ? (long) produtos.size() : 0L;
+    }
+
+    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -72,4 +67,23 @@ public class UsuarioEntity {
 
     public TipoUsuario getTipoUsuario() { return tipoUsuario; }
     public void setTipoUsuario(TipoUsuario tipoUsuario) { this.tipoUsuario = tipoUsuario; }
+
+    public List<ProdutoEntity> getProdutos() { return produtos; }
+    public void setProdutos(List<ProdutoEntity> produtos) { this.produtos = produtos; }
+
+    public Long getTotalProdutos() {
+        return totalprodutos != null ? totalprodutos : calcularTotalProdutos();
+    }
+
+    public void setTotalProdutos(Long totalProdutos) {
+        this.totalprodutos = totalProdutos;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id +
+                ", Nome: " + nome +
+                ", Email: " + email +
+                ", Tipo: " + tipoUsuario;
+    }
 }
