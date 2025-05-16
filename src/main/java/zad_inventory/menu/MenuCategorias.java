@@ -1,93 +1,88 @@
 package zad_inventory.menu;
 
-import zad_inventory.config.DBConnection;
 import zad_inventory.entity.CategoriaEntity;
 import zad_inventory.entity.UsuarioEntity;
-import zad_inventory.repository.CategoriaRepository;
-
-import javax.persistence.EntityManager;
+import zad_inventory.controller.CategoriaController;
 import java.util.List;
 import java.util.Scanner;
 
 public class MenuCategorias {
+
     public static void Categorias(UsuarioEntity usuarioLogado) {
-        EntityManager em = DBConnection.getEntityManager();
-        CategoriaRepository repo = new CategoriaRepository(em);
+        CategoriaController controller = new CategoriaController();
         Scanner scanner = new Scanner(System.in);
         boolean executando = true;
 
         while (executando) {
-            System.out.println("\n--- MENU DE CATEGORIAS ---");
-            System.out.println("1. Cadastrar nova categoria");
-            System.out.println("2. Listar categorias");
-            System.out.println("3. Atualizar categoria");
-            System.out.println("4. Remover categoria");
-            System.out.println("0. Sair");
+            System.out.println("\n=== MENU CATEGORIAS ===");
+            System.out.println("1. Cadastrar Categoria");
+            System.out.println("2. Listar Categorias");
+            System.out.println("3. Buscar Categoria por ID");
+            System.out.println("4. Atualizar Categoria");
+            System.out.println("5. Remover Categoria");
+            System.out.println("0. Voltar");
             System.out.print("Escolha uma opção: ");
 
-            int opcao = scanner.nextInt();
-            scanner.nextLine(); // consumir quebra de linha
+            String opcao = scanner.nextLine();
 
             switch (opcao) {
-                case 1 -> {
-                    System.out.print("Nome da categoria: ");
+                case "1" -> {
+                    System.out.print("Digite o nome da categoria: ");
                     String nome = scanner.nextLine();
+
                     System.out.print("Descrição da categoria: ");
                     String descricao = scanner.nextLine();
-                    CategoriaEntity nova = new CategoriaEntity(nome, descricao);
-                    repo.salvar(nova);
-                    System.out.println(" Categoria cadastrada com sucesso!");
+                    CategoriaEntity novaCategoria = new CategoriaEntity(nome, descricao);
+                    controller.salvar(novaCategoria);
                 }
-                case 2 -> {
-                    List<CategoriaEntity> categorias = repo.buscarTodos();
+                case "2" -> {
+                    List<CategoriaEntity> categorias = controller.buscarTodos();
                     if (categorias.isEmpty()) {
                         System.out.println("Nenhuma categoria cadastrada.");
                     } else {
-                        categorias.forEach(System.out::println);
-                    }
-                }
-                case 3 -> {
-                    System.out.print("ID da categoria para atualizar: ");
-                    Long id = scanner.nextLong();
-                    scanner.nextLine();
-                    CategoriaEntity existente = repo.buscarPorId(id);
-                    if (existente != null) {
-                        System.out.print("Novo nome (atual: " + existente.getNome() + "): ");
-                        String novoNome = scanner.nextLine();
-                        System.out.print("Nova descrição (atual: " + existente.getDescricao() + "): ");
-                        String novaDesc = scanner.nextLine();
-                        existente.setNome(novoNome);
-                        existente.setDescricao(novaDesc);
-                        repo.atualizar(existente);
-                        System.out.println(" Categoria atualizada!");
-                    } else {
-                        System.out.println(" Categoria não encontrada.");
-                    }
-                }
-                case 4 -> {
-                    System.out.print("ID da categoria para remover: ");
-                    Long id = scanner.nextLong();
-                    scanner.nextLine(); // Limpar buffer
-
-                    try {
-                        CategoriaEntity categoria = repo.buscarPorId(id);
-                        if (categoria != null) {
-                            // Versão mais robusta da remoção
-                            repo.remover(categoria);
-                            System.out.println("✅ Categoria removida com sucesso!");
-                        } else {
-                            System.out.println("❌ Categoria não encontrada.");
+                        System.out.println("\n=== LISTA DE CATEGORIAS ===");
+                        for (CategoriaEntity c : categorias) {
+                            System.out.printf("ID: %d | Nome: %s%n", c.getId(), c.getNome());
                         }
-                    } catch (Exception e) {
-                        System.out.println("❌ Erro ao remover: " + e.getMessage());
                     }
                 }
-                case 0 -> executando = false;
-                default -> System.out.println(" Opção inválida.");
+                case "3" -> {
+                    System.out.print("Digite o ID da categoria: ");
+                    Long id = Long.parseLong(scanner.nextLine());
+                    CategoriaEntity categoria = controller.buscarPorId(id);
+                    if (categoria != null) {
+                        System.out.printf("Categoria encontrada: ID %d | Nome: %s%n", categoria.getId(), categoria.getNome());
+                    }
+                }
+                case "4" -> {
+                    System.out.print("Digite o ID da categoria a ser atualizada: ");
+                    Long id = Long.parseLong(scanner.nextLine());
+                    CategoriaEntity categoria = controller.buscarPorId(id);
+                    if (categoria == null) {
+                        System.out.println("Categoria não encontrada.");
+                        break;
+                    }
+                    System.out.print("Digite o novo nome da categoria: ");
+                    String novoNome = scanner.nextLine();
+                    categoria.setNome(novoNome);
+                    controller.atualizar(categoria);
+                }
+                case "5" -> {
+                    System.out.print("Digite o ID da categoria a ser removida: ");
+                    Long id = Long.parseLong(scanner.nextLine());
+                    CategoriaEntity categoria = controller.buscarPorId(id);
+                    if (categoria == null) {
+                        System.out.println("Categoria não encontrada.");
+                        break;
+                    }
+                    controller.remover(categoria);
+                }
+                case "0" -> {
+                    System.out.println("Voltando ao menu principal...");
+                    executando = false;
+                }
+                default -> System.out.println("Opção inválida. Tente novamente.");
             }
         }
-
-        em.close();
-        MenuPrincipal.exibir(usuarioLogado);
     }
 }

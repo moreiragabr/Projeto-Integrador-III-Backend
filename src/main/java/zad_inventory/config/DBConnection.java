@@ -5,8 +5,15 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class DBConnection {
-    private static final EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("zad_inventory");
+    private static final EntityManagerFactory emf;
+
+    static {
+        try {
+            emf = Persistence.createEntityManagerFactory("zad_inventory");
+        } catch (Exception e) {
+            throw new RuntimeException("Falha ao criar EntityManagerFactory", e);
+        }
+    }
 
     public static EntityManager getEntityManager() {
         return emf.createEntityManager();

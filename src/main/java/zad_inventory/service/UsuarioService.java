@@ -15,7 +15,6 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    // Registrar novo usuário (com validação de email)
     public UsuarioEntity registrarUsuario(UsuarioEntity novoUsuario, UsuarioEntity solicitante) {
         if (solicitante.getTipoUsuario() != TipoUsuario.GERENTE) {
             throw new SecurityException("Apenas gerentes podem registrar novos usuários");
@@ -29,7 +28,6 @@ public class UsuarioService {
         return novoUsuario;
     }
 
-    // Remover usuário
     public void removerUsuario(Long id, UsuarioEntity solicitante) {
         if (solicitante.getTipoUsuario() != TipoUsuario.GERENTE) {
             throw new SecurityException("Apenas gerentes podem remover usuários");
@@ -39,7 +37,6 @@ public class UsuarioService {
         usuarioRepository.remover(usuario);
     }
 
-    // Buscar por ID
     public UsuarioEntity buscarPorId(Long id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID inválido");
@@ -47,29 +44,24 @@ public class UsuarioService {
         return usuarioRepository.buscarPorId(id);
     }
 
-    // Buscar por ID com produtos (carregamento eager)
     public UsuarioEntity buscarPorIdComProdutos(Long id) {
         return usuarioRepository.buscarPorIdComProdutos(id);
     }
 
-    // Listar todos os usuários
     public List<UsuarioEntity> listarTodos() {
         return usuarioRepository.listarTodos();
     }
 
-    // Listar com contagem de produtos (otimizado)
     public List<UsuarioEntity> listarComTotalProdutos() {
         return usuarioRepository.listarComTotalProdutos();
     }
 
-    // Ranking de usuários por quantidade de produtos
     public List<UsuarioEntity> listarRankingUsuarios() {
         return listarComTotalProdutos().stream()
                 .sorted((u1, u2) -> Long.compare(u2.getTotalProdutos(), u1.getTotalProdutos()))
                 .collect(Collectors.toList());
     }
 
-    // Buscar por email
     public UsuarioEntity buscarPorEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email não pode ser vazio");
@@ -77,15 +69,12 @@ public class UsuarioService {
         return usuarioRepository.buscarPorEmail(email);
     }
 
-    // Atualizar usuário
     public UsuarioEntity atualizarUsuario(UsuarioEntity usuarioAtualizado) {
         if (usuarioAtualizado.getId() == null) {
             throw new IllegalArgumentException("Usuário deve ter ID para atualização");
         }
 
         UsuarioEntity usuarioExistente = buscarPorId(usuarioAtualizado.getId());
-
-        // Atualiza apenas campos permitidos
         usuarioExistente.setNome(usuarioAtualizado.getNome());
         usuarioExistente.setSenha(usuarioAtualizado.getSenha());
 
