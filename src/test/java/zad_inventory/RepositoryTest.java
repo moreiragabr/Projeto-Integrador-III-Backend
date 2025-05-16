@@ -20,10 +20,10 @@ public class RepositoryTest {
         OperacaoRepository repository = new OperacaoRepository(session.getEntityManagerFactory().createEntityManager());
 
         OperacaoEntity op = new OperacaoEntity();
-        op.setProdutoId(1);
-        op.setProdutoNome("Garrafa");
-        op.setUsuarioId(1);
-        op.setUsuarioNome("Lucas");
+//        op.setProdutoId(1);
+//        op.setProdutoNome("Garrafa");
+//        op.setUsuarioId(1);
+//        op.setUsuarioNome("Lucas");
         op.setSituacao("Realizada");
         op.setQuantidade(2);
         op.setData(LocalDateTime.now());

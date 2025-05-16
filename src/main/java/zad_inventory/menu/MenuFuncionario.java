@@ -43,7 +43,7 @@ public class MenuFuncionario {
                     System.out.println("Saindo do menu funcionário...");
                     break;
                 default:
-                    System.out.println("❌ Opção inválida. Tente novamente.");
+                    System.out.println(" Opção inválida. Tente novamente.");
             }
         }
     }

@@ -1,43 +1,78 @@
 package zad_inventory.service;
 
+import zad_inventory.config.DBConnection;
 import zad_inventory.entity.CategoriaEntity;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 
 public class CategoriaService {
 
-    @PersistenceContext
-    private EntityManager em;
-
-    @Transactional
     public void salvar(CategoriaEntity categoria) {
-        em.getTransaction().begin();
-        em.persist(categoria);
-        em.getTransaction().commit();
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(categoria);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Erro ao salvar categoria", e);
+        } finally {
+            em.close();
+        }
     }
 
-    public List<CategoriaEntity> buscarTodos(){
-        return em.createQuery("SELECT c FROM CategoriaEntity c", CategoriaEntity.class).getResultList();
+    public List<CategoriaEntity> buscarTodos() {
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            return em.createQuery("SELECT c FROM CategoriaEntity c", CategoriaEntity.class)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
     }
 
-    public CategoriaEntity buscarPorId(Long id){
-        return em.find(CategoriaEntity.class, id);
+    public CategoriaEntity buscarPorId(Long id) {
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            return em.find(CategoriaEntity.class, id);
+        } finally {
+            em.close();
+        }
     }
 
-    @Transactional
-    public void atualizar(CategoriaEntity categoria){
-        em.getTransaction().begin();
-        em.merge(categoria);
-        em.getTransaction().commit();
+    public void atualizar(CategoriaEntity categoria) {
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(categoria);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Erro ao atualizar categoria", e);
+        } finally {
+            em.close();
+        }
     }
 
-    @Transactional
-    public void remover(CategoriaEntity categoria){
-        em.getTransaction().begin();
-        em.remove(em.contains(categoria) ? categoria : em.merge(categoria));
-        em.getTransaction().commit();
+    public void remover(CategoriaEntity categoria) {
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            categoria = em.contains(categoria) ? categoria : em.merge(categoria);
+            em.remove(categoria);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Erro ao remover categoria", e);
+        } finally {
+            em.close();
+        }
     }
 }

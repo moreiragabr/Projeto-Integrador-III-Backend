@@ -1,19 +1,16 @@
 package zad_inventory.menu;
 
-import zad_inventory.config.DBConnection;
 import zad_inventory.entity.UsuarioEntity;
-import zad_inventory.repository.UsuarioRepository;
 import zad_inventory.enums.TipoUsuario;
-import zad_inventory.service.UsuarioService;
+import zad_inventory.controller.UsuarioController;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuUsuario {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static final UsuarioService usuarioService =
-            new UsuarioService(new UsuarioRepository(DBConnection.getEntityManager()));
-
+    private static final UsuarioController usuarioController = new UsuarioController();
     private static UsuarioEntity usuarioLogado;
 
     public static void exibir(UsuarioEntity logado) {
@@ -23,7 +20,8 @@ public class MenuUsuario {
         while (executando) {
             System.out.println("\n========= MENU USUÁRIOS =========");
             System.out.println("1 - Listar Usuários");
-            System.out.println("2 - Cadastrar Novo Usuário");
+            System.out.println("2 - Ranking de Usuários por Produtos Criados");
+            System.out.println("3 - Cadastrar Novo Usuário");
             System.out.println("0 - Voltar");
             System.out.print("Escolha uma opção: ");
 
@@ -31,16 +29,43 @@ public class MenuUsuario {
 
             switch (opcao) {
                 case "1":
-                    usuarioService.listarUsuarios().forEach(System.out::println);
+                    listarUsuarios();
                     break;
                 case "2":
+                    exibirRanking();
+                    break;
+                case "3":
                     cadastrarNovoUsuario();
                     break;
                 case "0":
                     executando = false;
                     break;
                 default:
-                    System.out.println("❌ Opção inválida.");
+                    System.out.println("Opção inválida.");
+            }
+        }
+    }
+
+    private static void listarUsuarios() {
+        List<UsuarioEntity> usuarios = usuarioController.listarTodos();
+        if (usuarios != null) {
+            usuarios.forEach(System.out::println);
+        }
+    }
+
+    private static void exibirRanking() {
+        List<UsuarioEntity> ranking = usuarioController.listarRankingUsuarios();
+        if (ranking != null) {
+            System.out.println("\n--- Ranking de Usuários por Produtos Cadastrados ---");
+            int rank = 1;
+            for (UsuarioEntity u : ranking) {
+                System.out.printf("#%d | ID: %d | Nome: %s | Tipo: %s | Total de Produtos: %d%n",
+                        rank++,
+                        u.getId(),
+                        u.getNome(),
+                        u.getTipoUsuario(),
+                        u.getTotalProdutos() != null ? u.getTotalProdutos() : 0
+                );
             }
         }
     }
@@ -52,6 +77,11 @@ public class MenuUsuario {
         System.out.print("Email: ");
         String email = scanner.nextLine();
 
+        if (!email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            System.out.println("Formato de email inválido!");
+            return;
+        }
+
         System.out.print("Senha: ");
         String senha = scanner.nextLine();
 
@@ -61,10 +91,12 @@ public class MenuUsuario {
         try {
             TipoUsuario tipoUsuario = TipoUsuario.valueOf(tipo);
             UsuarioEntity novoUsuario = new UsuarioEntity(nome, email, senha, tipoUsuario);
-            usuarioService.registrarUsuario(novoUsuario, usuarioLogado);
-            System.out.println("✅ Usuário cadastrado com sucesso.");
+            UsuarioEntity usuarioRegistrado = usuarioController.registrarUsuario(novoUsuario, usuarioLogado);
+            if (usuarioRegistrado != null) {
+                System.out.println("Usuário cadastrado com sucesso.");
+            }
         } catch (IllegalArgumentException e) {
-            System.out.println("❌ Tipo de usuário inválido. Use GERENTE ou FUNCIONARIO.");
+            System.out.println("Tipo de usuário inválido. Use GERENTE ou FUNCIONARIO.");
         }
     }
 }

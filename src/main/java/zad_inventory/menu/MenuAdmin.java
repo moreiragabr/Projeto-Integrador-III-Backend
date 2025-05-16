@@ -47,7 +47,7 @@ public class MenuAdmin {
                     System.out.println("Saindo do menu administrador...");
                     break;
                 default:
-                    System.out.println("❌ Opção inválida. Tente novamente.");
+                    System.out.println(" Opção inválida. Tente novamente.");
             }
         }
     }
