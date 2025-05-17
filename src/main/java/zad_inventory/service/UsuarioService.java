@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UsuarioService {
-
     private final UsuarioRepository usuarioRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
+    // Métodos básicos de CRUD
     public UsuarioEntity registrarUsuario(UsuarioEntity novoUsuario, UsuarioEntity solicitante) {
         if (solicitante.getTipoUsuario() != TipoUsuario.GERENTE) {
             throw new SecurityException("Apenas gerentes podem registrar novos usuários");
@@ -42,10 +42,6 @@ public class UsuarioService {
             throw new IllegalArgumentException("ID inválido");
         }
         return usuarioRepository.buscarPorId(id);
-    }
-
-    public UsuarioEntity buscarPorIdComProdutos(Long id) {
-        return usuarioRepository.buscarPorIdComProdutos(id);
     }
 
     public List<UsuarioEntity> listarTodos() {

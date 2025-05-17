@@ -1,20 +1,31 @@
 package zad_inventory.menu;
 
 import zad_inventory.entity.UsuarioEntity;
-import zad_inventory.enums.TipoUsuario;
 import zad_inventory.controller.UsuarioController;
+import zad_inventory.repository.UsuarioRepository;
+import zad_inventory.service.UsuarioService;
+import zad_inventory.config.DBConnection;
 
-import java.util.List;
+import javax.persistence.EntityManager;
 import java.util.Scanner;
 
 public class MenuUsuario {
-
-    private static final Scanner scanner = new Scanner(System.in);
-    private static final UsuarioController usuarioController = new UsuarioController();
+    private static UsuarioController controller;
+    private static Scanner scanner;
     private static UsuarioEntity usuarioLogado;
 
+    // Método estático para compatibilidade com MenuAdmin
     public static void exibir(UsuarioEntity logado) {
         usuarioLogado = logado;
+        scanner = new Scanner(System.in);
+        EntityManager em = DBConnection.getEntityManager();
+        controller = new UsuarioController(new UsuarioService(new UsuarioRepository(em)), scanner);
+
+        new MenuUsuario().exibirInstancia();
+    }
+
+    // Método de instância
+    public void exibirInstancia() {
         boolean executando = true;
 
         while (executando) {
@@ -29,13 +40,13 @@ public class MenuUsuario {
 
             switch (opcao) {
                 case "1":
-                    listarUsuarios();
+                    controller.listarUsuarios();
                     break;
                 case "2":
-                    exibirRanking();
+                    controller.exibirRanking();
                     break;
                 case "3":
-                    cadastrarNovoUsuario();
+                    controller.cadastrarNovoUsuario(usuarioLogado);
                     break;
                 case "0":
                     executando = false;
@@ -43,60 +54,6 @@ public class MenuUsuario {
                 default:
                     System.out.println("Opção inválida.");
             }
-        }
-    }
-
-    private static void listarUsuarios() {
-        List<UsuarioEntity> usuarios = usuarioController.listarTodos();
-        if (usuarios != null) {
-            usuarios.forEach(System.out::println);
-        }
-    }
-
-    private static void exibirRanking() {
-        List<UsuarioEntity> ranking = usuarioController.listarRankingUsuarios();
-        if (ranking != null) {
-            System.out.println("\n--- Ranking de Usuários por Produtos Cadastrados ---");
-            int rank = 1;
-            for (UsuarioEntity u : ranking) {
-                System.out.printf("#%d | ID: %d | Nome: %s | Tipo: %s | Total de Produtos: %d%n",
-                        rank++,
-                        u.getId(),
-                        u.getNome(),
-                        u.getTipoUsuario(),
-                        u.getTotalProdutos() != null ? u.getTotalProdutos() : 0
-                );
-            }
-        }
-    }
-
-    private static void cadastrarNovoUsuario() {
-        System.out.print("Nome: ");
-        String nome = scanner.nextLine();
-
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
-
-        if (!email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            System.out.println("Formato de email inválido!");
-            return;
-        }
-
-        System.out.print("Senha: ");
-        String senha = scanner.nextLine();
-
-        System.out.print("Tipo (GERENTE ou FUNCIONARIO): ");
-        String tipo = scanner.nextLine().toUpperCase();
-
-        try {
-            TipoUsuario tipoUsuario = TipoUsuario.valueOf(tipo);
-            UsuarioEntity novoUsuario = new UsuarioEntity(nome, email, senha, tipoUsuario);
-            UsuarioEntity usuarioRegistrado = usuarioController.registrarUsuario(novoUsuario, usuarioLogado);
-            if (usuarioRegistrado != null) {
-                System.out.println("Usuário cadastrado com sucesso.");
-            }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Tipo de usuário inválido. Use GERENTE ou FUNCIONARIO.");
         }
     }
 }

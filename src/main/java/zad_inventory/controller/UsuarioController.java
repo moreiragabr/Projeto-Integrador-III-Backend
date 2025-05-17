@@ -4,120 +4,86 @@ import zad_inventory.entity.UsuarioEntity;
 import zad_inventory.enums.TipoUsuario;
 import zad_inventory.service.UsuarioService;
 import zad_inventory.repository.UsuarioRepository;
-import zad_inventory.config.DBConnection;
 
-import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Scanner;
 
 public class UsuarioController {
     private final UsuarioService usuarioService;
+    private final Scanner scanner;
 
-    public UsuarioController() {
-        EntityManager em = DBConnection.getEntityManager();
-        this.usuarioService = new UsuarioService(new UsuarioRepository(em));
+    public UsuarioController(UsuarioService usuarioService, Scanner scanner) {
+        this.usuarioService = usuarioService;
+        this.scanner = scanner;
     }
 
-    public UsuarioEntity registrarUsuario(UsuarioEntity novoUsuario, UsuarioEntity solicitante) {
+    public void cadastrarNovoUsuario(UsuarioEntity usuarioLogado) {
+        System.out.print("Nome: ");
+        String nome = scanner.nextLine();
+
+        System.out.print("Email: ");
+        String email = scanner.nextLine();
+
+        if (!email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            System.out.println("Formato de email inválido!");
+            return;
+        }
+
+        System.out.print("Senha: ");
+        String senha = scanner.nextLine();
+
+        System.out.print("Tipo (GERENTE ou FUNCIONARIO): ");
+        String tipo = scanner.nextLine().toUpperCase();
+
         try {
-            UsuarioEntity usuarioRegistrado = usuarioService.registrarUsuario(novoUsuario, solicitante);
-            System.out.println("Usuário registrado com sucesso!");
-            return usuarioRegistrado;
-        } catch (SecurityException e) {
-            System.out.println("Erro de permissão: " + e.getMessage());
+            TipoUsuario tipoUsuario = TipoUsuario.valueOf(tipo);
+            UsuarioEntity novoUsuario = new UsuarioEntity(nome, email, senha, tipoUsuario);
+            UsuarioEntity usuarioRegistrado = usuarioService.registrarUsuario(novoUsuario, usuarioLogado);
+            System.out.println("Usuário cadastrado com sucesso!");
         } catch (IllegalArgumentException e) {
-            System.out.println("Erro de validação: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Erro ao registrar usuário: " + e.getMessage());
-        }
-        return null;
-    }
-
-    public void removerUsuario(Long id, UsuarioEntity solicitante) {
-        try {
-            usuarioService.removerUsuario(id, solicitante);
-            System.out.println("Usuário removido com sucesso!");
-        } catch (SecurityException e) {
-            System.out.println("Erro de permissão: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Erro ao remover usuário: " + e.getMessage());
-        }
-    }
-
-    public UsuarioEntity buscarPorId(Long id) {
-        try {
-            UsuarioEntity usuario = usuarioService.buscarPorId(id);
-            if (usuario == null) {
-                System.out.println("Usuário não encontrado.");
+            if (e.getMessage().contains("No enum constant")) {
+                System.out.println("Tipo de usuário inválido. Use GERENTE ou FUNCIONARIO.");
+            } else {
+                System.out.println("Erro: " + e.getMessage());
             }
-            return usuario;
-        } catch (IllegalArgumentException e) {
-            System.out.println("ID inválido: " + e.getMessage());
-            return null;
-        } catch (Exception e) {
-            System.out.println("Erro ao buscar usuário: " + e.getMessage());
-            return null;
+        } catch (SecurityException e) {
+            System.out.println("Erro de permissão: " + e.getMessage());
         }
     }
 
-    public UsuarioEntity buscarPorIdComProdutos(Long id) {
+    public void listarUsuarios() {
         try {
-            return usuarioService.buscarPorIdComProdutos(id);
-        } catch (Exception e) {
-            System.out.println("Erro ao buscar usuário com produtos: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public List<UsuarioEntity> listarTodos() {
-        try {
-            return usuarioService.listarTodos();
+            List<UsuarioEntity> usuarios = usuarioService.listarTodos();
+            if (usuarios.isEmpty()) {
+                System.out.println("Nenhum usuário cadastrado.");
+            } else {
+                System.out.println("\n--- Lista de Usuários ---");
+                usuarios.forEach(u -> System.out.printf("ID: %d | Nome: %s | Email: %s | Tipo: %s%n",
+                        u.getId(),
+                        u.getNome(),
+                        u.getEmail(),
+                        u.getTipoUsuario()));
+            }
         } catch (Exception e) {
             System.out.println("Erro ao listar usuários: " + e.getMessage());
-            return null;
         }
     }
 
-    public List<UsuarioEntity> listarComTotalProdutos() {
+    public void exibirRanking() {
         try {
-            return usuarioService.listarComTotalProdutos();
+            List<UsuarioEntity> ranking = usuarioService.listarRankingUsuarios();
+            System.out.println("\n--- Ranking de Usuários por Produtos Cadastrados ---");
+            int rank = 1;
+            for (UsuarioEntity u : ranking) {
+                System.out.printf("#%d | ID: %d | Nome: %s | Tipo: %s | Total de Produtos: %d%n",
+                        rank++,
+                        u.getId(),
+                        u.getNome(),
+                        u.getTipoUsuario(),
+                        u.getTotalProdutos() != null ? u.getTotalProdutos() : 0);
+            }
         } catch (Exception e) {
-            System.out.println("Erro ao listar usuários com total de produtos: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public List<UsuarioEntity> listarRankingUsuarios() {
-        try {
-            return usuarioService.listarRankingUsuarios();
-        } catch (Exception e) {
-            System.out.println("Erro ao gerar ranking de usuários: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public UsuarioEntity buscarPorEmail(String email) {
-        try {
-            return usuarioService.buscarPorEmail(email);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Email inválido: " + e.getMessage());
-            return null;
-        } catch (Exception e) {
-            System.out.println("Erro ao buscar usuário por email: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public UsuarioEntity atualizarUsuario(UsuarioEntity usuarioAtualizado) {
-        try {
-            UsuarioEntity usuario = usuarioService.atualizarUsuario(usuarioAtualizado);
-            System.out.println("Usuário atualizado com sucesso!");
-            return usuario;
-        } catch (IllegalArgumentException e) {
-            System.out.println("Dados inválidos: " + e.getMessage());
-            return null;
-        } catch (Exception e) {
-            System.out.println("Erro ao atualizar usuário: " + e.getMessage());
-            return null;
+            System.out.println("Erro ao exibir ranking: " + e.getMessage());
         }
     }
 }
