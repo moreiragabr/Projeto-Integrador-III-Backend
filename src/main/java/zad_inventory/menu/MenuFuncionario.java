@@ -1,18 +1,19 @@
 package zad_inventory.menu;
 
+import zad_inventory.controller.OperacaoController;
 import zad_inventory.entity.UsuarioEntity;
-import zad_inventory.menu.MenuOperacao;
-import zad_inventory.menu.MenuProduto;
-
 import java.util.Scanner;
 
 public class MenuFuncionario {
 
     private final UsuarioEntity usuarioLogado;
     private final Scanner scanner = new Scanner(System.in);
+    private final OperacaoController controller;
 
     public MenuFuncionario(UsuarioEntity usuarioLogado) {
         this.usuarioLogado = usuarioLogado;
+        // Agora instanciamos o controller que cuida de registrar/listar operações
+        this.controller = new OperacaoController(usuarioLogado);
     }
 
     public void exibir() {
@@ -29,21 +30,18 @@ public class MenuFuncionario {
             String opcao = scanner.nextLine();
 
             switch (opcao) {
-                case "1":
-                    MenuProduto.exibir(usuarioLogado);
-                    break;
-                case "2":
-                    MenuOperacao.Operacoes(usuarioLogado);
-                    break;
-                case "3":
-                    MenuOperacao.listarTodas();
-                    break;
-                case "0":
+                case "1" -> MenuProduto.exibir(usuarioLogado);
+                case "2" -> {
+                    controller.registrarOperacao();
+                }
+                case "3" -> {
+                    controller.listarOperacoes();
+                }
+                case "0" -> {
                     executando = false;
                     System.out.println("Saindo do menu funcionário...");
-                    break;
-                default:
-                    System.out.println(" Opção inválida. Tente novamente.");
+                }
+                default -> System.out.println("Opção inválida. Tente novamente.");
             }
         }
     }

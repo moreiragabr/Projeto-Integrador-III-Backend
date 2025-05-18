@@ -16,7 +16,7 @@ public class Main {
         UsuarioService usuarioService = new UsuarioService(new UsuarioRepository(em));
         LoginService loginService = new LoginService(usuarioService);
 
-        System.out.println("✅ Sistema iniciado com sucesso!");
+        System.out.println("Sistema iniciado com sucesso!");
 
         while (true) {
             UsuarioEntity usuarioLogado = loginService.realizarLogin();

@@ -1,70 +1,76 @@
 package zad_inventory.service;
 
+import zad_inventory.config.DBConnection;
 import zad_inventory.entity.OperacaoEntity;
+import zad_inventory.entity.ProdutoEntity;
+import zad_inventory.entity.UsuarioEntity;
 import zad_inventory.enums.Situacao;
+import zad_inventory.repository.CategoriaRepository;
 import zad_inventory.repository.OperacaoRepository;
+import zad_inventory.repository.ProdutoRepository;
 
-import java.time.LocalDate;
+import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class OperacaoService {
 
-    private final OperacaoRepository operacaoRepository;
+    private final OperacaoRepository repo;
+    private final ProdutoService produtoService;
 
-    public OperacaoService(OperacaoRepository operacaoRepository) {
-        this.operacaoRepository = operacaoRepository;
+    public OperacaoService() {
+        EntityManager em = DBConnection.getEntityManager();
+        this.repo = new OperacaoRepository(em);
+        this.produtoService = new ProdutoService(
+                new ProdutoRepository(em),
+                new CategoriaRepository(em)
+        );
     }
 
-
-    public void createOperation(OperacaoEntity operacao) {
-        operacaoRepository.save(operacao);
-    }
-
-
-    public List<OperacaoEntity> listAllOperations() {
-        return operacaoRepository.listAll();
-    }
-
-
-    public OperacaoEntity findById(Long id) {
-        return operacaoRepository.findById(id);
-    }
-
-
-    public void updateOperation(OperacaoEntity operacao) {
-        operacaoRepository.update(operacao);
-    }
-
-    public void deleteOperation(OperacaoEntity operacao) {
-        operacaoRepository.delete(operacao);
-    }
-
-    //Alterar operacao para cancelada
-    public void cancelOperation(Long id) {
-        OperacaoEntity op = operacaoRepository.findById(id);
-        if (op != null) {
-            op.setSituacao(Situacao.CANCELADA);
-            operacaoRepository.update(op);
+    public void registrarVenda(UsuarioEntity usuario, Long produtoId, int quantidade) {
+        // Busca e valida produto
+        ProdutoEntity produto = produtoService.buscarPorId(produtoId);
+        if (produto == null) {
+            throw new IllegalArgumentException("Produto não encontrado.");
         }
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("Quantidade deve ser maior que zero.");
+        }
+        if (produto.getQuantidade() < quantidade) {
+            throw new IllegalStateException("Estoque insuficiente. Atual: " + produto.getQuantidade());
+        }
+
+        // Atualiza estoque e persiste operação
+        produto.setQuantidade(produto.getQuantidade() - quantidade);
+        produtoService.salvarProduto(produto);
+
+        OperacaoEntity op = new OperacaoEntity();
+        op.setProduto(produto);
+        op.setUsuario(usuario);
+        op.setQuantidade(quantidade);
+        op.setSituacao(Situacao.REALIZADA);
+        op.setData(LocalDateTime.now());
+        repo.save(op);
     }
 
-    //CONSULTA POR DATA EXATA
-    public List<OperacaoEntity> listByDate(LocalDate data) {
-        return operacaoRepository.findByDate(data);
+    public List<OperacaoEntity> buscarTodos() {
+        return repo.listAll();
     }
 
-    //CONSULTA POR DATA PERIODO
-    public List<OperacaoEntity> listByPeriod(LocalDate inicio, LocalDate fim) {
-        return operacaoRepository.findByPeriod(inicio, fim);
+    public OperacaoEntity buscarPorId(Long id) {
+        return repo.findById(id);
     }
 
-    //CONSULTA POR USUARIO
-    public List<OperacaoEntity> listByUsuarioNome(String nome) {
-        return operacaoRepository.findByUsuarioNome(nome);
+    public void atualizarSituacao(Long id, Situacao novaSituacao) {
+        OperacaoEntity op = repo.findById(id);
+        if (op == null) {
+            throw new IllegalArgumentException("Operação não encontrada.");
+        }
+        op.setSituacao(novaSituacao);
+        repo.update(op);
     }
 
-    //CONSULTA POR SITUAÇÃO
-    public List<OperacaoEntity> listBySituacao(Situacao situacao) {
-        return operacaoRepository.findBySituacao(situacao);
+    public List<OperacaoEntity> filtrarPorSituacao(Situacao situacao) {
+        return repo.findBySituacao(situacao);
     }
 }
