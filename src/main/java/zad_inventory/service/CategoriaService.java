@@ -8,12 +8,14 @@ import java.util.List;
 
 public class CategoriaService {
 
-    public void salvar(CategoriaEntity categoria) {
+    // Operações básicas de CRUD (sem interação com usuário)
+    public CategoriaEntity salvar(CategoriaEntity categoria) {
         EntityManager em = DBConnection.getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(categoria);
             em.getTransaction().commit();
+            return categoria;
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
@@ -43,12 +45,13 @@ public class CategoriaService {
         }
     }
 
-    public void atualizar(CategoriaEntity categoria) {
+    public CategoriaEntity atualizar(CategoriaEntity categoria) {
         EntityManager em = DBConnection.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.merge(categoria);
+            CategoriaEntity categoriaAtualizada = em.merge(categoria);
             em.getTransaction().commit();
+            return categoriaAtualizada;
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
@@ -59,12 +62,14 @@ public class CategoriaService {
         }
     }
 
-    public void remover(CategoriaEntity categoria) {
+    public void remover(Long id) {
         EntityManager em = DBConnection.getEntityManager();
         try {
             em.getTransaction().begin();
-            categoria = em.contains(categoria) ? categoria : em.merge(categoria);
-            em.remove(categoria);
+            CategoriaEntity categoria = em.find(CategoriaEntity.class, id);
+            if (categoria != null) {
+                em.remove(categoria);
+            }
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {

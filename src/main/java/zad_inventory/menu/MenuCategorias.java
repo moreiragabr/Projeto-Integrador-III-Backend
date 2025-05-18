@@ -1,9 +1,7 @@
 package zad_inventory.menu;
 
-import zad_inventory.entity.CategoriaEntity;
 import zad_inventory.entity.UsuarioEntity;
 import zad_inventory.controller.CategoriaController;
-import java.util.List;
 import java.util.Scanner;
 
 public class MenuCategorias {
@@ -26,57 +24,11 @@ public class MenuCategorias {
             String opcao = scanner.nextLine();
 
             switch (opcao) {
-                case "1" -> {
-                    System.out.print("Digite o nome da categoria: ");
-                    String nome = scanner.nextLine();
-
-                    System.out.print("Descrição da categoria: ");
-                    String descricao = scanner.nextLine();
-                    CategoriaEntity novaCategoria = new CategoriaEntity(nome, descricao);
-                    controller.salvar(novaCategoria);
-                }
-                case "2" -> {
-                    List<CategoriaEntity> categorias = controller.buscarTodos();
-                    if (categorias.isEmpty()) {
-                        System.out.println("Nenhuma categoria cadastrada.");
-                    } else {
-                        System.out.println("\n=== LISTA DE CATEGORIAS ===");
-                        for (CategoriaEntity c : categorias) {
-                            System.out.printf("ID: %d | Nome: %s%n", c.getId(), c.getNome());
-                        }
-                    }
-                }
-                case "3" -> {
-                    System.out.print("Digite o ID da categoria: ");
-                    Long id = Long.parseLong(scanner.nextLine());
-                    CategoriaEntity categoria = controller.buscarPorId(id);
-                    if (categoria != null) {
-                        System.out.printf("Categoria encontrada: ID %d | Nome: %s%n", categoria.getId(), categoria.getNome());
-                    }
-                }
-                case "4" -> {
-                    System.out.print("Digite o ID da categoria a ser atualizada: ");
-                    Long id = Long.parseLong(scanner.nextLine());
-                    CategoriaEntity categoria = controller.buscarPorId(id);
-                    if (categoria == null) {
-                        System.out.println("Categoria não encontrada.");
-                        break;
-                    }
-                    System.out.print("Digite o novo nome da categoria: ");
-                    String novoNome = scanner.nextLine();
-                    categoria.setNome(novoNome);
-                    controller.atualizar(categoria);
-                }
-                case "5" -> {
-                    System.out.print("Digite o ID da categoria a ser removida: ");
-                    Long id = Long.parseLong(scanner.nextLine());
-                    CategoriaEntity categoria = controller.buscarPorId(id);
-                    if (categoria == null) {
-                        System.out.println("Categoria não encontrada.");
-                        break;
-                    }
-                    controller.remover(categoria);
-                }
+                case "1" -> controller.cadastrarCategoria();
+                case "2" -> controller.listarCategorias();
+                case "3" -> controller.buscarCategoriaPorId();
+                case "4" -> controller.atualizarCategoria();
+                case "5" -> controller.removerCategoria();
                 case "0" -> {
                     System.out.println("Voltando ao menu principal...");
                     executando = false;
