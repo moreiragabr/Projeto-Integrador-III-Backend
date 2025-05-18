@@ -28,7 +28,6 @@ public class OperacaoService {
     }
 
     public void registrarVenda(UsuarioEntity usuario, Long produtoId, int quantidade) {
-        // Busca e valida produto
         ProdutoEntity produto = produtoService.buscarPorId(produtoId);
         if (produto == null) {
             throw new IllegalArgumentException("Produto não encontrado.");
@@ -40,10 +39,11 @@ public class OperacaoService {
             throw new IllegalStateException("Estoque insuficiente. Atual: " + produto.getQuantidade());
         }
 
-        // Atualiza estoque e persiste operação
+        // atualiza estoque
         produto.setQuantidade(produto.getQuantidade() - quantidade);
         produtoService.salvarProduto(produto);
 
+        // cria e salva operação
         OperacaoEntity op = new OperacaoEntity();
         op.setProduto(produto);
         op.setUsuario(usuario);
@@ -53,13 +53,16 @@ public class OperacaoService {
         repo.save(op);
     }
 
+
     public List<OperacaoEntity> buscarTodos() {
         return repo.listAll();
     }
 
+
     public OperacaoEntity buscarPorId(Long id) {
         return repo.findById(id);
     }
+
 
     public void atualizarSituacao(Long id, Situacao novaSituacao) {
         OperacaoEntity op = repo.findById(id);
@@ -69,6 +72,7 @@ public class OperacaoService {
         op.setSituacao(novaSituacao);
         repo.update(op);
     }
+
 
     public List<OperacaoEntity> filtrarPorSituacao(Situacao situacao) {
         return repo.findBySituacao(situacao);

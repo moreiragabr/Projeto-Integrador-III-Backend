@@ -8,6 +8,7 @@ import zad_inventory.enums.Situacao;
 import zad_inventory.service.OperacaoService;
 
 public class OperacaoController {
+
     private final OperacaoService service;
     private final Scanner scanner;
     private final UsuarioEntity usuarioLogado;
@@ -28,11 +29,12 @@ public class OperacaoController {
             service.registrarVenda(usuarioLogado, produtoId, quantidade);
             System.out.println("Operação registrada com sucesso!");
         } catch (NumberFormatException e) {
-            System.out.println("Entrada inválida. Digite apenas números.");
+            System.out.println("Entrada inválida: use apenas números.");
         } catch (Exception e) {
             System.out.println("Erro ao registrar operação: " + e.getMessage());
         }
     }
+
 
     public void listarOperacoes() {
         try {
@@ -42,9 +44,15 @@ public class OperacaoController {
             } else {
                 System.out.println("\n=== LISTA DE OPERAÇÕES ===");
                 for (OperacaoEntity op : ops) {
-                    System.out.printf("ID: %d | Produto: %s | Usuário: %s | Situação: %s | Quantidade: %d | Data: %s%n",
-                            op.getId(), op.getProduto().getNomeProduto(), op.getUsuario().getNome(),
-                            op.getSituacao(), op.getQuantidade(), op.getData());
+                    System.out.printf(
+                            "ID: %d | Produto: %s | Usuário: %s | Situação: %s | Quantidade: %d | Data: %s%n",
+                            op.getId(),
+                            op.getProduto().getNomeProduto(),
+                            op.getUsuario().getNome(),
+                            op.getSituacao(),
+                            op.getQuantidade(),
+                            op.getData()
+                    );
                 }
             }
         } catch (Exception e) {
@@ -52,24 +60,32 @@ public class OperacaoController {
         }
     }
 
+
     public void buscarOperacaoPorId() {
         System.out.print("Digite o ID da operação: ");
         try {
             Long id = Long.parseLong(scanner.nextLine());
             OperacaoEntity op = service.buscarPorId(id);
             if (op != null) {
-                System.out.printf("Operação encontrada: ID %d | Produto: %s | Usuário: %s | Situação: %s | Quantidade: %d | Data: %s%n",
-                        op.getId(), op.getProduto().getNomeProduto(), op.getUsuario().getNome(),
-                        op.getSituacao(), op.getQuantidade(), op.getData());
+                System.out.printf(
+                        "Operação encontrada: ID %d | Produto: %s | Usuário: %s | Situação: %s | Quantidade: %d | Data: %s%n",
+                        op.getId(),
+                        op.getProduto().getNomeProduto(),
+                        op.getUsuario().getNome(),
+                        op.getSituacao(),
+                        op.getQuantidade(),
+                        op.getData()
+                );
             } else {
                 System.out.println("Operação não encontrada.");
             }
         } catch (NumberFormatException e) {
-            System.out.println("ID inválido. Digite apenas números.");
+            System.out.println("ID inválido. Use apenas números.");
         } catch (Exception e) {
             System.out.println("Erro ao buscar operação: " + e.getMessage());
         }
     }
+
 
     public void atualizarSituacao() {
         System.out.print("Digite o ID da operação a ser atualizada: ");
@@ -87,6 +103,7 @@ public class OperacaoController {
         }
     }
 
+
     public void filtrarPorSituacao() {
         System.out.print("Situação para filtrar (REALIZADA, CANCELADA, SEPARADA): ");
         try {
@@ -97,9 +114,15 @@ public class OperacaoController {
             } else {
                 System.out.println("\n=== OPERAÇÕES FILTRADAS ===");
                 for (OperacaoEntity op : resultado) {
-                    System.out.printf("ID: %d | Produto: %s | Usuário: %s | Situação: %s | Quantidade: %d | Data: %s%n",
-                            op.getId(), op.getProduto().getNomeProduto(), op.getUsuario().getNome(),
-                            op.getSituacao(), op.getQuantidade(), op.getData());
+                    System.out.printf(
+                            "ID: %d | Produto: %s | Usuário: %s | Situação: %s | Quantidade: %d | Data: %s%n",
+                            op.getId(),
+                            op.getProduto().getNomeProduto(),
+                            op.getUsuario().getNome(),
+                            op.getSituacao(),
+                            op.getQuantidade(),
+                            op.getData()
+                    );
                 }
             }
         } catch (IllegalArgumentException e) {
