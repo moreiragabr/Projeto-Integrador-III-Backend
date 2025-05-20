@@ -12,7 +12,7 @@ public class MenuFuncionario {
 
     public MenuFuncionario(UsuarioEntity usuarioLogado) {
         this.usuarioLogado = usuarioLogado;
-        // Agora instanciamos o controller que cuida de registrar/listar operações
+
         this.controller = new OperacaoController(usuarioLogado);
     }
 
@@ -32,11 +32,11 @@ public class MenuFuncionario {
             switch (opcao) {
                 case "1" -> MenuProduto.exibir(usuarioLogado);
                 case "2" -> {
-                    controller.registrarOperacao();
+                    MenuOperacao menuOperacao = new MenuOperacao(usuarioLogado);
+                    menuOperacao.exibirMenu();
                 }
-                case "3" -> {
-                    controller.listarOperacoes();
-                }
+                case "3" -> controller.listarOperacoes();
+
                 case "0" -> {
                     executando = false;
                     System.out.println("Saindo do menu funcionário...");
