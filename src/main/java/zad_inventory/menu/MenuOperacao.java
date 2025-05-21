@@ -13,6 +13,7 @@ public class MenuOperacao {
 
     private final Scanner scanner;
     private final OperacaoController controller;
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     public MenuOperacao(UsuarioEntity usuarioLogado) {
         this.scanner = new Scanner(System.in);
@@ -92,7 +93,7 @@ public class MenuOperacao {
                 String nomeUsuario = (op.getUsuario() != null && op.getUsuario().getNome() != null)
                         ? op.getUsuario().getNome() : "N/D";
                 String situacao = (op.getSituacao() != null) ? op.getSituacao().toString() : "N/D";
-                String dataFormatada = (op.getData() != null) ? op.getData().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) : "N/D";
+                String dataFormatada = (op.getData() != null) ? op.getData().format(DATE_TIME_FORMATTER) : "N/D";
 
                 System.out.printf("%-7d | %-25.25s | %-20.20s | %-12.12s | %-5d | %-16s\n",
                         op.getId(),
