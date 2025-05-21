@@ -59,7 +59,7 @@ public class MenuFuncionario {
 
 
 
-    
+
     private void listarProdutosDisponiveis() {
         System.out.println("\n--- LISTA DE PRODUTOS DISPONÍVEIS ---");
         try {
