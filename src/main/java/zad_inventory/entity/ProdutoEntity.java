@@ -16,8 +16,19 @@ public class ProdutoEntity {
     @Column(name = "quantidade")
     private int quantidade;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_categoria_id", insertable = false, updatable = false)
+    private CategoriaEntity categoria;
+
     @Column(name = "fk_categoria_id")
-    private int categoriaId;
+    private Long categoriaId;  // Alterado de int para Long
+
+    @ManyToOne
+    @JoinColumn(name = "fk_usuario_id", insertable = false, updatable = false)
+    private UsuarioEntity usuario;
+
+    @Column(name = "fk_usuario_id")
+    private Long usuarioId;
 
     @Column(name = "cor")
     private String cor;
@@ -27,11 +38,14 @@ public class ProdutoEntity {
 
     public ProdutoEntity() {}
 
-    public ProdutoEntity(Long id, String nomeProduto, int quantidade, int categoriaId, String cor, String tamanho) {
+    // Construtor atualizado (categoriaId como Long)
+    public ProdutoEntity(Long id, String nomeProduto, int quantidade, Long categoriaId,
+                         Long usuarioId, String cor, String tamanho) {
         this.id = id;
         this.nomeProduto = nomeProduto;
         this.quantidade = quantidade;
         this.categoriaId = categoriaId;
+        this.usuarioId = usuarioId;
         this.cor = cor;
         this.tamanho = tamanho;
     }
@@ -43,6 +57,9 @@ public class ProdutoEntity {
                 ", nomeProduto='" + nomeProduto + '\'' +
                 ", quantidade=" + quantidade +
                 ", categoriaId=" + categoriaId +
+                ", nomeCategoria=" + getNomeCategoria() +
+                ", descricaoCategoria=" + getDescricaoCategoria() +
+                ", usuarioId=" + usuarioId +
                 ", cor='" + cor + '\'' +
                 ", tamanho='" + tamanho + '\'' +
                 '}';
@@ -58,12 +75,30 @@ public class ProdutoEntity {
     public int getQuantidade() { return quantidade; }
     public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
 
-    public int getCategoriaId() { return categoriaId; }
-    public void setCategoriaId(int categoriaId) { this.categoriaId = categoriaId; }
+    public Long getCategoriaId() { return categoriaId; }  // Retorno alterado para Long
+    public void setCategoriaId(Long categoriaId) { this.categoriaId = categoriaId; }  // Parâmetro alterado para Long
+
+    public Long getUsuarioId() { return usuarioId; }
+    public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
 
     public String getCor() { return cor; }
     public void setCor(String cor) { this.cor = cor; }
 
     public String getTamanho() { return tamanho; }
     public void setTamanho(String tamanho) { this.tamanho = tamanho; }
+
+    public CategoriaEntity getCategoria() { return categoria; }
+    public void setCategoria(CategoriaEntity categoria) { this.categoria = categoria; }
+
+    public UsuarioEntity getUsuario() { return usuario; }
+    public void setUsuario(UsuarioEntity usuario) { this.usuario = usuario; }
+
+    // Métodos para acessar dados da categoria
+    public String getNomeCategoria() {
+        return categoria != null ? categoria.getNome() : null;
+    }
+
+    public String getDescricaoCategoria() {
+        return categoria != null ? categoria.getDescricao() : null;
+    }
 }
