@@ -29,7 +29,8 @@ public class MenuAdmin {
 
             switch (opcao) {
                 case "1":
-                    MenuProduto.exibir(usuarioLogado);
+                    MenuProduto menuProduto = new MenuProduto(usuarioLogado);
+                    menuProduto.exibirMenu();
                     break;
                 case "2":
                     MenuCategorias.Categorias(usuarioLogado);

@@ -3,6 +3,7 @@ package zad_inventory.menu;
 import zad_inventory.controller.OperacaoController;
 import zad_inventory.controller.ProdutoController;
 import zad_inventory.entity.OperacaoEntity;
+import zad_inventory.entity.ProdutoEntity;
 import zad_inventory.entity.UsuarioEntity;
 
 import java.time.format.DateTimeFormatter;
@@ -63,10 +64,40 @@ public class MenuFuncionario {
     private void listarProdutosDisponiveis() {
         System.out.println("\n--- LISTA DE PRODUTOS DISPONÍVEIS ---");
         try {
-            produtoController.listarProdutos();
 
+            List<ProdutoEntity> produtos = produtoController.listarTodosProdutos();
+
+            if (produtos.isEmpty()) {
+                System.out.println("Nenhum produto cadastrado no sistema.");
+            } else {
+
+                System.out.printf("%-5s | %-25s | %-5s | %-15s | %-10s | %-10s\n",
+                        "ID", "Nome do Produto", "Qtd", "Categoria", "Cor", "Tamanho");
+                String separator = "-".repeat(5 + 3 + 25 + 3 + 5 + 3 + 15 + 3 + 10 + 3 + 10);
+                System.out.println(separator);
+
+                for (ProdutoEntity p : produtos) {
+                    String nomeCategoria = "N/D";
+                    if (p.getCategoria() != null && p.getCategoria().getNome() != null) {
+                        nomeCategoria = p.getCategoria().getNome();
+                    } else if (p.getCategoriaId() != null) {
+                        nomeCategoria = "Cat ID:" + p.getCategoriaId();
+                    }
+
+                    System.out.printf("%-5d | %-25.25s | %-5d | %-15.15s | %-10.10s | %-10.10s\n",
+                            p.getId(),
+                            p.getNomeProduto() != null ? p.getNomeProduto() : "N/D",
+                            p.getQuantidade(),
+                            nomeCategoria,
+                            p.getCor() != null ? p.getCor() : "N/D",
+                            p.getTamanho() != null ? p.getTamanho() : "N/D");
+                }
+                System.out.println(separator);
+                System.out.println("Total de tipos de produto em estoque: " + produtos.size());
+            }
         } catch (Exception e) {
             System.out.println("Erro ao listar produtos: " + e.getMessage());
+
         }
     }
 
