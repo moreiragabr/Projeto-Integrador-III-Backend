@@ -46,7 +46,7 @@ public class OperacaoService {
 
         // Atualiza estoque
         produto.setQuantidade(produto.getQuantidade() - quantidade);
-        produtoService.salvarProduto(produto);
+        produtoService.salvarProduto(produto, usuario.getId()); // LINHA CORRIGIDA
 
         // Cria e salva operação
         OperacaoEntity op = new OperacaoEntity();

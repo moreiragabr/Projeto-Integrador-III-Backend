@@ -6,7 +6,7 @@ import zad_inventory.enums.Situacao;
 
 @Entity
 @Table(name = "operacao")
-public class OperacaoEntity {
+public class  OperacaoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
