@@ -1,6 +1,8 @@
 package zad_inventory.menu;
 
 import zad_inventory.entity.UsuarioEntity;
+import zad_inventory.menu.MenuCategorias;
+import zad_inventory.menu.MenuOperacao;
 
 import java.util.Scanner;
 
@@ -29,15 +31,13 @@ public class MenuAdmin {
 
             switch (opcao) {
                 case "1":
-                    MenuProduto menuProduto = new MenuProduto(usuarioLogado);
-                    menuProduto.exibirMenu();
+                    MenuProduto.exibir(usuarioLogado);
                     break;
                 case "2":
                     MenuCategorias.Categorias(usuarioLogado);
                     break;
                 case "3":
-                    MenuOperacao menuOperacao = new MenuOperacao(usuarioLogado);
-                    menuOperacao.exibirMenu();
+                    MenuOperacao.Operacoes(usuarioLogado);
                     break;
                 case "4":
                     MenuUsuario.exibir(usuarioLogado);

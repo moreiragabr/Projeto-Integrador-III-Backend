@@ -2,49 +2,82 @@ package zad_inventory.service;
 
 import zad_inventory.config.DBConnection;
 import zad_inventory.entity.CategoriaEntity;
-import zad_inventory.repository.CategoriaRepository;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
 public class CategoriaService {
-    private final CategoriaRepository repo;
 
-    public CategoriaService() {
-        EntityManager em = DBConnection.getEntityManager();
-        this.repo = new CategoriaRepository(em);
-    }
-
+    // Operações básicas de CRUD (sem interação com usuário)
     public CategoriaEntity salvar(CategoriaEntity categoria) {
-        if (categoria.getNome() == null || categoria.getNome().trim().isEmpty()) {
-            throw new IllegalArgumentException("O nome da categoria é obrigatório!");
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(categoria);
+            em.getTransaction().commit();
+            return categoria;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Erro ao salvar categoria", e);
+        } finally {
+            em.close();
         }
-        if (repo.buscarPorNome(categoria.getNome()) != null) {
-            throw new IllegalArgumentException("Já existe uma categoria com este nome!");
-        }
-        return repo.salvar(categoria);
     }
 
     public List<CategoriaEntity> buscarTodos() {
-        return repo.buscarTodos();
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            return em.createQuery("SELECT c FROM CategoriaEntity c", CategoriaEntity.class)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
     }
 
     public CategoriaEntity buscarPorId(Long id) {
-        CategoriaEntity categoria = repo.buscarPorId(id);
-        if (categoria == null) {
-            throw new IllegalArgumentException("Categoria não encontrada com ID: " + id);
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            return em.find(CategoriaEntity.class, id);
+        } finally {
+            em.close();
         }
-        return categoria;
     }
 
-    public void atualizar(Long id, String nome, String descricao) {
-        CategoriaEntity categoria = buscarPorId(id);
-        categoria.setNome(nome);
-        categoria.setDescricao(descricao);
-        repo.salvar(categoria);
+    public CategoriaEntity atualizar(CategoriaEntity categoria) {
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            CategoriaEntity categoriaAtualizada = em.merge(categoria);
+            em.getTransaction().commit();
+            return categoriaAtualizada;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Erro ao atualizar categoria", e);
+        } finally {
+            em.close();
+        }
     }
 
     public void remover(Long id) {
-        CategoriaEntity categoria = buscarPorId(id);
-        repo.remover(categoria);
+        EntityManager em = DBConnection.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            CategoriaEntity categoria = em.find(CategoriaEntity.class, id);
+            if (categoria != null) {
+                em.remove(categoria);
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Erro ao remover categoria", e);
+        } finally {
+            em.close();
+        }
     }
 }
