@@ -1,10 +1,9 @@
 package zad_inventory.repository;
 
-import zad_inventory.entity.CategoriaEntity;
+import zad_inventory.model.CategoriaEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class CategoriaRepository {

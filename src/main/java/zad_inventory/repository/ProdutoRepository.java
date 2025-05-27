@@ -1,9 +1,8 @@
 package zad_inventory.repository;
 
-import zad_inventory.entity.ProdutoEntity;
-import zad_inventory.entity.CategoriaEntity;
+import zad_inventory.model.ProdutoEntity;
+
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class ProdutoRepository {

@@ -1,6 +1,6 @@
 package zad_inventory.repository;
 
-import zad_inventory.entity.UsuarioEntity;
+import zad_inventory.model.UsuarioEntity;
 
 import javax.persistence.*;
 import java.util.List;
