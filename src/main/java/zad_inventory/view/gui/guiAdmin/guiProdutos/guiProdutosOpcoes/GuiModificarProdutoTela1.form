@@ -81,7 +81,7 @@
                       <text value="Voltar"/>
                     </properties>
                   </component>
-                  <component id="3c567" class="javax.swing.JButton" default-binding="true">
+                  <component id="3c567" class="javax.swing.JButton" binding="selecionarButton">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -120,9 +120,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="8f64e" class="javax.swing.JComboBox" binding="comboBoxCategoriaProduto">
+                  <component id="1d9aa" class="javax.swing.JTextField" binding="textFieldProdutoSelecionado">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties/>
                   </component>
@@ -142,7 +144,7 @@
                     </constraints>
                     <properties>
                       <font name="Fira Code Medium" size="16"/>
-                      <text value="Produto a ser modificado:"/>
+                      <text value="ID do produto a ser modificado:"/>
                     </properties>
                   </component>
                 </children>

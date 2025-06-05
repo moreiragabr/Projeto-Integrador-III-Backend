@@ -2,17 +2,17 @@ package zad_inventory.view;
 
 import zad_inventory.model.UsuarioEntity;
 import zad_inventory.enums.TipoUsuario;
+import zad_inventory.view.gui.guiAdmin.GuiAdmin;
+import zad_inventory.view.gui.guiFuncionario.GuiFuncionario;
 
 
 public class MenuPrincipal {
 
     public static void exibir(UsuarioEntity usuarioLogado) {
         if (usuarioLogado.getTipoUsuario() == TipoUsuario.GERENTE) {
-            MenuAdmin admin = new MenuAdmin(usuarioLogado);
-            admin.exibir();
+            GuiAdmin telaAdmin = new GuiAdmin(usuarioLogado);
         } else {
-            MenuFuncionario funcionario = new MenuFuncionario(usuarioLogado);
-            funcionario.exibir();
+            GuiFuncionario telaFuncionario = new GuiFuncionario(usuarioLogado);
         }
     }
 }

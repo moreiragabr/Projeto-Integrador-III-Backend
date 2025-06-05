@@ -19,6 +19,14 @@ public class CategoriaController {
         return service.buscarPorId(id);
     }
 
+    public List<String> buscarTodosNomes(){
+        return service.buscarTodosNomes();
+    }
+
+    public Long buscarIdPorNome(String nome){
+        return service.buscarIdPorNome(nome);
+    }
+
     public void atualizarCategoria(Long id, String nome, String descricao) {
         service.atualizar(id, nome, descricao);
     }

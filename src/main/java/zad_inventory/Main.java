@@ -1,28 +1,18 @@
 package zad_inventory;
 
-import zad_inventory.auth.LoginService;
-import zad_inventory.config.DBConnection;
-import zad_inventory.model.UsuarioEntity;
-import zad_inventory.view.MenuPrincipal;
-import zad_inventory.repository.UsuarioRepository;
-import zad_inventory.service.UsuarioService;
 
-import javax.persistence.EntityManager;
+import zad_inventory.view.gui.GuiLogin;
+
+import javax.swing.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        EntityManager em = DBConnection.getEntityManager();
-        UsuarioService usuarioService = new UsuarioService(new UsuarioRepository(em));
-        LoginService loginService = new LoginService(usuarioService);
 
         System.out.println("Sistema iniciado com sucesso!");
 
-        while (true) {
-            UsuarioEntity usuarioLogado = loginService.realizarLogin();
-            if (usuarioLogado != null) {
-                MenuPrincipal.exibir(usuarioLogado);
-            }
-        }
+            SwingUtilities.invokeLater(() -> {
+            GuiLogin telaLogin = new GuiLogin();
+            });
     }
 }

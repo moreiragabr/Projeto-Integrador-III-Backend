@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
+import java.util.List;
 
 @Entity // <- ESSA ANOTAÇÃO É ESSENCIAL
 @Table(name = "categoria")

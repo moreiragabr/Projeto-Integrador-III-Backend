@@ -1,9 +1,7 @@
 package zad_inventory.view.gui.guiAdmin.guiProdutos.guiProdutosOpcoes;
 
-import zad_inventory.controller.ProdutoController;
 import zad_inventory.model.ProdutoEntity;
 import zad_inventory.model.UsuarioEntity;
-import zad_inventory.view.gui.guiAdmin.guiProdutos.GuiProdutos;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -11,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class GuiProdutosLista extends JFrame{
+public class GuiBuscarProdutosPorCategoriaTela2 extends JFrame{
     private JPanel panelTitulo;
     private JLabel labelTitulo;
     private JPanel panelTituloApp;
@@ -20,13 +18,11 @@ public class GuiProdutosLista extends JFrame{
     private JPanel panelBotoes;
     private JPanel panelBotao;
     private JButton voltarButton;
-    private JPanel panelListaProdutos;
     private JTable tableListaProdutos;
-
-    private final ProdutoController controller;
+    private JPanel panelListaDeProdutos;
 
     public DefaultTableModel criarModelo(List<ProdutoEntity> produtos) {
-        String[] colunas = {"ID", "Nome","Cor", "Categoria","Tamanho", "Estoque",};
+        String[] colunas = {"ID", "Nome","Cor","Tamanho", "Estoque",};
         DefaultTableModel model = new DefaultTableModel(colunas, 0);
 
         for (ProdutoEntity p : produtos) {
@@ -34,7 +30,6 @@ public class GuiProdutosLista extends JFrame{
                     p.getId(),
                     p.getNomeProduto(),
                     p.getCor(),
-                    p.getNomeCategoria(),
                     p.getTamanho(),
                     p.getQuantidade()
             });
@@ -43,17 +38,14 @@ public class GuiProdutosLista extends JFrame{
         return model;
     }
 
-    public GuiProdutosLista(UsuarioEntity usuarioLogado){
+    public GuiBuscarProdutosPorCategoriaTela2(List<ProdutoEntity> produtos, UsuarioEntity usuarioLogado){
 
-        this.controller = new ProdutoController(usuarioLogado);
-
-        setContentPane(panelListaProdutos);
+        setContentPane(panelListaDeProdutos);
         setTitle("Lista de produtos");
-        setSize(700, 550);
+        setSize(760, 550);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        List<ProdutoEntity> produtos = controller.listarTodosProdutos();
         tableListaProdutos.setModel(criarModelo(produtos));
 
         setVisible(true);
@@ -61,9 +53,10 @@ public class GuiProdutosLista extends JFrame{
         voltarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GuiProdutos telaProdutos = new GuiProdutos(usuarioLogado);
                 dispose();
+                GuiBuscarProdutoPorCategoria telaBuscar = new GuiBuscarProdutoPorCategoria(usuarioLogado);
             }
         });
     }
+
 }

@@ -36,6 +36,29 @@ public class CategoriaService {
         return categoria;
     }
 
+    public Long buscarIdPorNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome da categoria não pode ser vazio!");
+        }
+
+        try {
+            Long id = repo.buscarIdPorNome(nome);
+
+            if (id == null) {
+                return null;
+            }
+
+            return id;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Erro ao buscar ID da categoria '" + nome + "'", e);
+        }
+    }
+
+
+    public List<String> buscarTodosNomes() {
+        return repo.buscarTodosNomes();
+    }
+
     public void atualizar(Long id, String nome, String descricao) {
         CategoriaEntity categoria = buscarPorId(id);
         categoria.setNome(nome);

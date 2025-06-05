@@ -3,6 +3,7 @@ package zad_inventory.repository;
 import zad_inventory.model.ProdutoEntity;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class ProdutoRepository {
@@ -39,7 +40,7 @@ public class ProdutoRepository {
                     .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
-            throw new RuntimeException("Produto não encontrado com ID: " + id, e);
+            return null;
         }
     }
 
@@ -74,6 +75,19 @@ public class ProdutoRepository {
                 .setParameter("nome", "%" + nome + "%")
                 .getResultList();
     }
+
+    public ProdutoEntity findByNomeIgnoreCase(String nome) {
+        try {
+            return em.createQuery(
+                            "SELECT p FROM ProdutoEntity p WHERE LOWER(p.nomeProduto) = LOWER(:nome)",
+                            ProdutoEntity.class)
+                    .setParameter("nome", nome)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
 
     public List<ProdutoEntity> findByCategoriaId(Long categoriaId) {
         return em.createQuery(

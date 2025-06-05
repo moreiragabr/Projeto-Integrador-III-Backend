@@ -87,6 +87,21 @@ public class ProdutoService {
         return produtoRepository.findByNomeContaining(nome);
     }
 
+    public ProdutoEntity buscarPorNomeIgnoreCase(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome do produto não pode ser vazio");
+        }
+
+        ProdutoEntity produto = produtoRepository.findByNomeIgnoreCase(nome.trim());
+
+        if (produto == null) {
+            throw new IllegalArgumentException("Produto com nome '" + nome + "' não encontrado");
+        }
+
+        return produto;
+    }
+
+
     public List<ProdutoEntity> buscarPorCategoria(Long categoriaId) {
         if (categoriaId == null) {
             throw new IllegalArgumentException("ID da categoria para busca não pode ser nulo.");

@@ -1,8 +1,17 @@
 package zad_inventory.view.gui.guiAdmin.guiProdutos.guiProdutosOpcoes;
 
-import javax.swing.*;
+import zad_inventory.controller.ProdutoController;
+import zad_inventory.model.ProdutoEntity;
+import zad_inventory.model.UsuarioEntity;
+import zad_inventory.view.gui.guiAdmin.guiProdutos.GuiProdutos;
 
-public class GuiBuscarProdutoPorNome {
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+public class GuiBuscarProdutoPorNome extends JFrame {
     private JPanel panelTitulo;
     private JLabel labelTitulo;
     private JPanel panelTituloApp;
@@ -17,4 +26,36 @@ public class GuiBuscarProdutoPorNome {
     private JPanel panelLabel;
     private JLabel labelTexto1;
     private JPanel panelBuscarProdutoPorNome;
+    private JButton buscarButton;
+
+    public GuiBuscarProdutoPorNome(UsuarioEntity usuarioLogado){
+
+        ProdutoController controller = new ProdutoController(usuarioLogado);
+
+        setContentPane(panelBuscarProdutoPorNome);
+        setTitle("Lista de produtos");
+        setSize(700, 550);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
+
+
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nome = textFieldNomeProduto.getText();
+                ProdutoEntity produtoSelecionado = controller.buscarProdutoPorNome(nome);
+                JOptionPane.showMessageDialog(null, "Produto encontrado!"
+                +"\nID: "+produtoSelecionado.getId()+"\nNome: "+produtoSelecionado.getNomeProduto()+"\nTamaho: "+produtoSelecionado.getTamanho()+"\nEstoque: "+produtoSelecionado.getQuantidade()+"\nCategoria: "+produtoSelecionado.getNomeCategoria());
+            }
+        });
+
+        voltarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiProdutos telaProdutos = new GuiProdutos(usuarioLogado);
+            }
+        });
+    }
 }

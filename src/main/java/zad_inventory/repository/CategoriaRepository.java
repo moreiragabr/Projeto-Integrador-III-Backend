@@ -47,6 +47,11 @@ public class CategoriaRepository {
         return em.find(CategoriaEntity.class, id);
     }
 
+    public List<String> buscarTodosNomes() {
+        return em.createQuery("SELECT c.nome FROM CategoriaEntity c", String.class)
+                .getResultList();
+    }
+
     // Verificar existência por ID (NOVO MÉTODO)
     public boolean existsById(Long id) {
         if (id == null) {
@@ -86,6 +91,18 @@ public class CategoriaRepository {
             throw new RuntimeException("Categoria não encontrada para atualização");
         }
         return salvar(categoria); // Reutiliza o método salvar
+    }
+
+    public Long buscarIdPorNome(String nome) {
+        try {
+            return em.createQuery("SELECT c.id FROM CategoriaEntity c WHERE c.nome = :nome", Long.class)
+                    .setParameter("nome", nome)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null; // Retorna null se não encontrar
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar ID da categoria", e);
+        }
     }
 
     public void remover(CategoriaEntity categoria) {

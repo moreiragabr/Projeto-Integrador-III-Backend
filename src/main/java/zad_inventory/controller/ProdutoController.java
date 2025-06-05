@@ -84,6 +84,10 @@ public class ProdutoController {
         return produtoService.buscarPorNome(nome);
     }
 
+    public ProdutoEntity buscarProdutoPorNome(String nome){
+        return produtoService.buscarPorNomeIgnoreCase(nome);
+    }
+
     public List<ProdutoEntity> buscarProdutosPorCategoria(Long categoriaId) {
         return produtoService.buscarPorCategoria(categoriaId);
     }

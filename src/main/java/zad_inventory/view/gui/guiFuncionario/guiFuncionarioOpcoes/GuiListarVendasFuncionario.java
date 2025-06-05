@@ -1,8 +1,13 @@
 package zad_inventory.view.gui.guiFuncionario.guiFuncionarioOpcoes;
 
-import javax.swing.*;
+import zad_inventory.model.UsuarioEntity;
+import zad_inventory.view.gui.guiFuncionario.GuiFuncionario;
 
-public class GuiListarVendasFuncionario {
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class GuiListarVendasFuncionario extends JFrame{
     private JPanel panelTitulo;
     private JLabel labelTitulo;
     private JPanel panelTituloApp;
@@ -14,4 +19,22 @@ public class GuiListarVendasFuncionario {
     private JPanel panelLista;
     private JTable tableListaProdutos;
     private JPanel panelListarVendasFuncionario;
+
+    public GuiListarVendasFuncionario(UsuarioEntity usuarioLogado){
+
+        setContentPane(panelListarVendasFuncionario);
+        setTitle("Tela Admin");
+        setSize(600,400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
+
+        voltarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GuiFuncionario telaFuncionario = new GuiFuncionario(usuarioLogado);
+                dispose();
+            }
+        });
+    }
 }
