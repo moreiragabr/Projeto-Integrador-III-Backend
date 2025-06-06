@@ -3,6 +3,7 @@ package zad_inventory.view.gui.guiAdmin.guiCategorias;
 import zad_inventory.controller.CategoriaController;
 import zad_inventory.model.UsuarioEntity;
 import zad_inventory.view.gui.guiAdmin.GuiAdmin;
+import zad_inventory.view.gui.guiAdmin.guiCategorias.guiCategoriasOpcoes.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -41,6 +42,46 @@ public class GuiCategorias extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 dispose();
                 GuiAdmin telaAdmin = new GuiAdmin(usuarioLogado);
+            }
+        });
+
+        cadastrarNovaCategoriaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiCategoriasCadastro telaCadastro = new GuiCategoriasCadastro(usuarioLogado);
+            }
+        });
+
+        listarTodasAsCategoriasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiCategoriasLista telaLista = new GuiCategoriasLista(usuarioLogado);
+            }
+        });
+
+        buscarCategoriaPorIDButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiBuscarCategoriaPorId telaBuscar = new GuiBuscarCategoriaPorId(usuarioLogado);
+            }
+        });
+
+        modificarCategoriaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiModificarCategoriaTela1 telaModificar = new GuiModificarCategoriaTela1(usuarioLogado);
+            }
+        });
+
+        removerCategoriaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiRemoverCategoria telaRemover = new GuiRemoverCategoria(usuarioLogado);
             }
         });
     }

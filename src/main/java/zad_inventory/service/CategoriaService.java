@@ -31,7 +31,7 @@ public class CategoriaService {
     public CategoriaEntity buscarPorId(Long id) {
         CategoriaEntity categoria = repo.buscarPorId(id);
         if (categoria == null) {
-            throw new IllegalArgumentException("Categoria não encontrada com ID: " + id);
+            return null;
         }
         return categoria;
     }

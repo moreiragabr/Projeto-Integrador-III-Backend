@@ -1,8 +1,15 @@
 package zad_inventory.view.gui.guiAdmin.guiCategorias.guiCategoriasOpcoes;
 
-import javax.swing.*;
+import zad_inventory.controller.CategoriaController;
+import zad_inventory.model.CategoriaEntity;
+import zad_inventory.model.UsuarioEntity;
+import zad_inventory.view.gui.guiAdmin.guiCategorias.GuiCategorias;
 
-public class GuiModificarCategoriaTela2 {
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class GuiModificarCategoriaTela2 extends JFrame{
     private JPanel panelTitulo;
     private JLabel labelTitulo;
     private JPanel panelTituloApp;
@@ -19,4 +26,52 @@ public class GuiModificarCategoriaTela2 {
     private JLabel labelTexto1;
     private JLabel labelTexto2;
     private JPanel panelModificarCategoria;
+    private JButton modificarButton;
+    private JLabel categoriaSelecionadaJLabel;
+
+    public GuiModificarCategoriaTela2(CategoriaEntity categoriaSelecionada, UsuarioEntity usuarioLogado){
+
+        CategoriaController controller = new CategoriaController();
+
+        setContentPane(panelModificarCategoria);
+        setTitle("Modificar categorias");
+        setSize(700, 550);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        categoriaSelecionadaJLabel.setText("Categoria selecionada: "+categoriaSelecionada.getNome());
+
+        setVisible(true);
+
+        voltarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiModificarCategoriaTela1 telaModificar = new GuiModificarCategoriaTela1(usuarioLogado);
+            }
+        });
+
+        modificarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nome = textFieldNomeCategoria.getText();
+                String descricao = textFieldDescricaoCategoria.getText();
+
+                if (nome != null && descricao != null) {
+                    controller.atualizarCategoria(categoriaSelecionada.getId(), nome, descricao);
+
+                    CategoriaEntity categoriaAtualizada = controller.buscarCategoriaPorId(categoriaSelecionada.getId());
+
+                    JOptionPane.showMessageDialog(null, "Categoria atualizada com sucesso!" +
+                            "\nNome: "+categoriaAtualizada.getNome()+"\nDescrição: "+categoriaAtualizada.getDescricao());
+
+                    GuiModificarCategoriaTela1 telaModificar = new GuiModificarCategoriaTela1(usuarioLogado);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Dados inválidos ou nulos!");
+                }
+
+            }
+        });
+    }
 }
