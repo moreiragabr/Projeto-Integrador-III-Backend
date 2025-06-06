@@ -81,7 +81,7 @@
                       <text value="Voltar"/>
                     </properties>
                   </component>
-                  <component id="72c9e" class="javax.swing.JButton" binding="buscarButton">
+                  <component id="72c9e" class="javax.swing.JButton" binding="venderButton">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -120,15 +120,17 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="c02b0" class="javax.swing.JComboBox" binding="comboBoxProdutoSelecionado">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
-                  </component>
                   <component id="b73f4" class="javax.swing.JSpinner" binding="spinnerQuantidade">
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="ecc29" class="javax.swing.JTextField" binding="textFieldIdProduto">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties/>
                   </component>
@@ -148,7 +150,7 @@
                     </constraints>
                     <properties>
                       <font name="Fira Code Medium" size="16"/>
-                      <text value="Produto:"/>
+                      <text value="ID do produto:"/>
                     </properties>
                   </component>
                   <component id="cf699" class="javax.swing.JLabel">

@@ -3,6 +3,7 @@ package zad_inventory.view.gui.guiAdmin.guiOperacoes;
 import zad_inventory.controller.OperacaoController;
 import zad_inventory.model.UsuarioEntity;
 import zad_inventory.view.gui.guiAdmin.GuiAdmin;
+import zad_inventory.view.gui.guiAdmin.guiOperacoes.guiOperacoesOpcoes.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -45,6 +46,46 @@ public class GuiOperacoes extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 dispose();
                 GuiAdmin telaAdmin = new GuiAdmin(usuarioLogado);
+            }
+        });
+
+        realizarNovaVendaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiRealizarVenda novaVendaTela = new GuiRealizarVenda(usuarioLogado);
+            }
+        });
+
+        listarTodasAsVendasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiListarVendas listarVendasTela = new GuiListarVendas(usuarioLogado);
+            }
+        });
+
+        buscarVendasPorIDButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiBuscarVendasPorId buscarVendasPorId = new GuiBuscarVendasPorId(usuarioLogado);
+            }
+        });
+
+        atualizarSituaçãoDeOperaçãoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiAtualizarSituacaoOperacaoTela1 atualizarSituacaoOperacaoTela1 = new GuiAtualizarSituacaoOperacaoTela1(usuarioLogado);
+            }
+        });
+
+        buscarOperacaoPorSituacaoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiBuscarOperacoesPorSituacao buscarOperacoesPorSituacao = new GuiBuscarOperacoesPorSituacao(usuarioLogado);
             }
         });
     }

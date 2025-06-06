@@ -1,8 +1,17 @@
 package zad_inventory.view.gui.guiAdmin.guiOperacoes.guiOperacoesOpcoes;
 
-import javax.swing.*;
+import zad_inventory.controller.OperacaoController;
+import zad_inventory.model.OperacaoEntity;
+import zad_inventory.model.ProdutoEntity;
+import zad_inventory.model.UsuarioEntity;
+import zad_inventory.view.gui.guiAdmin.guiOperacoes.GuiOperacoes;
 
-public class GuiBuscarVendasPorId {
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.format.DateTimeFormatter;
+
+public class GuiBuscarVendasPorId extends JFrame{
     private JPanel panelTitulo;
     private JLabel labelTitulo;
     private JPanel panelTituloApp;
@@ -17,4 +26,43 @@ public class GuiBuscarVendasPorId {
     private JPanel panelLabel;
     private JLabel labelTexto1;
     private JPanel panelBuscarVendasPorId;
+    private JButton buscarButton;
+
+    public GuiBuscarVendasPorId(UsuarioEntity usuarioLogado){
+        OperacaoController controller = new OperacaoController(usuarioLogado);
+        DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+        setContentPane(panelBuscarVendasPorId);
+        setTitle("Buscar operação por id");
+        setSize(700, 550);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
+
+        voltarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                GuiOperacoes telaOperacoes = new GuiOperacoes(usuarioLogado);
+            }
+        });
+
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Long id = Long.parseLong(textFieldNomeProduto.getText());
+                OperacaoEntity operacao = controller.buscarOperacaoPorId(id);
+                UsuarioEntity usuario = operacao.getUsuario();
+                ProdutoEntity produto = operacao.getProduto();
+
+                if (operacao != null) {
+                    JOptionPane.showMessageDialog(null,
+                            "ID da Operação: "+id+"\nProduto vendido: "+produto.getNomeProduto()+"\nQuantidade vendida: "+operacao.getQuantidade()+"\nUsuário responsável: "+usuario.getNome()+"\nHorário: "+formatoData.format(operacao.getData()));
+                }else{
+                    JOptionPane.showMessageDialog(null, "Operação não encontrada!");
+                }
+
+            }
+        });
+    }
 }

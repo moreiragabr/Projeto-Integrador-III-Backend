@@ -1,20 +1,20 @@
 package zad_inventory.view.gui.guiAdmin.guiOperacoes.guiOperacoesOpcoes;
 
 import zad_inventory.controller.OperacaoController;
+import zad_inventory.enums.Situacao;
 import zad_inventory.model.OperacaoEntity;
 import zad_inventory.model.ProdutoEntity;
 import zad_inventory.model.UsuarioEntity;
-import zad_inventory.view.gui.guiAdmin.guiOperacoes.GuiOperacoes;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class GuiListarVendas extends JFrame{
+public class GuiBuscarOperacoesPorSituacaoTela2 extends JFrame{
+    private JPanel panelListaVendas;
     private JPanel panelTitulo;
     private JLabel labelTitulo;
     private JPanel panelTituloApp;
@@ -24,7 +24,7 @@ public class GuiListarVendas extends JFrame{
     private JPanel panelBotao;
     private JButton voltarButton;
     private JTable tableListaProdutos;
-    private JPanel panelListaVendas;
+    private JLabel situacaoEscolhitaJLabel;
 
     public DefaultTableModel criarModelo(List<OperacaoEntity> operacoes) {
         String[] colunas = {"ID", "Itens","Quantidade", "Situação","Usuário", "Data",};
@@ -44,21 +44,24 @@ public class GuiListarVendas extends JFrame{
                     formatoData.format(o.getData())
             });
         }
-
         return model;
     }
 
-    public GuiListarVendas(UsuarioEntity usuarioLogado){
-        OperacaoController controller = new OperacaoController(usuarioLogado);
+    public GuiBuscarOperacoesPorSituacaoTela2(UsuarioEntity usuarioLogado, String situacao){
 
         setContentPane(panelListaVendas);
-        setTitle("Listar vendas");
+        setTitle("Modificar situação de operação");
         setSize(1000, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        List<OperacaoEntity> operacoes = controller.listarOperacoes();
-        tableListaProdutos.setModel(criarModelo(operacoes));
+        OperacaoController controller = new OperacaoController(usuarioLogado);
+
+        Situacao novaSituacao = Situacao.valueOf(situacao);
+        situacaoEscolhitaJLabel.setText("Situação escolhida: "+novaSituacao);
+
+        tableListaProdutos.setModel(criarModelo(controller.filtrarPorSituacao(novaSituacao)));
+
 
         setVisible(true);
 
@@ -66,7 +69,7 @@ public class GuiListarVendas extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                GuiOperacoes telaOperacoes = new GuiOperacoes(usuarioLogado);
+                GuiBuscarOperacoesPorSituacao telaBuscar = new GuiBuscarOperacoesPorSituacao(usuarioLogado);
             }
         });
     }

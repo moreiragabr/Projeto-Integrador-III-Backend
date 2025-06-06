@@ -10,6 +10,7 @@ import zad_inventory.repository.OperacaoRepository;
 import zad_inventory.repository.ProdutoRepository;
 
 import javax.persistence.EntityManager;
+import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,7 +42,8 @@ public class OperacaoService {
             throw new IllegalArgumentException("Quantidade deve ser maior que zero.");
         }
         if (produto.getQuantidade() < quantidade) {
-            throw new IllegalStateException("Estoque insuficiente para o produto '" + produto.getNomeProduto() + "'. Atual: " + produto.getQuantidade());
+            JOptionPane.showMessageDialog(null, "Estoque insuficiente!");
+            return null;
         }
 
         // Atualiza estoque
@@ -56,6 +58,7 @@ public class OperacaoService {
         op.setSituacao(Situacao.REALIZADA);
         op.setData(LocalDateTime.now());
         repo.save(op);
+        JOptionPane.showMessageDialog(null, "Produto vendido com sucesso!");
         return op; // Return da entidade criada
     }
 
