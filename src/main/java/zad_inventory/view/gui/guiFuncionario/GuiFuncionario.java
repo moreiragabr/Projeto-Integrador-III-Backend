@@ -12,7 +12,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 
 public class GuiFuncionario extends JFrame {
     private JPanel panelTitulo;
@@ -44,6 +43,7 @@ public class GuiFuncionario extends JFrame {
         setSize(600,400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        labelUsuarioLogado.setText("Usuário logado: "+usuarioLogado.getNome());
         setVisible(true);
 
         listaDeProdutosButton.addActionListener(new ActionListener() {
