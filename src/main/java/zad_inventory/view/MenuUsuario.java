@@ -20,7 +20,7 @@ public class MenuUsuario {
         usuarioLogado = logado;
         scanner = new Scanner(System.in);
         EntityManager em = DBConnection.getEntityManager();
-        controller = new UsuarioController(new UsuarioService(new UsuarioRepository(em)));
+        //controller = new UsuarioController(new UsuarioService(new UsuarioRepository(em)));
 
         new MenuUsuario().exibirInstancia();
     }

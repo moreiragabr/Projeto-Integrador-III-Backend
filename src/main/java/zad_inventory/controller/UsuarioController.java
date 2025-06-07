@@ -6,11 +6,7 @@ import zad_inventory.service.UsuarioService;
 import java.util.List;
 
 public class UsuarioController {
-    private final UsuarioService usuarioService;
-
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
+    private final UsuarioService usuarioService = new UsuarioService();
 
     public void cadastrarNovoUsuario(UsuarioEntity novoUsuario, UsuarioEntity usuarioLogado) {
         usuarioService.registrarUsuario(novoUsuario, usuarioLogado);

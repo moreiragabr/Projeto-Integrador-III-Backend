@@ -1,27 +1,31 @@
 package zad_inventory.service;
 
+import zad_inventory.config.DBConnection;
 import zad_inventory.model.UsuarioEntity;
 import zad_inventory.enums.TipoUsuario;
 import zad_inventory.repository.UsuarioRepository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.*;
 
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public UsuarioService() {
+        EntityManager em = DBConnection.getEntityManager();
+        this.usuarioRepository = new UsuarioRepository(em);
     }
 
     // Métodos básicos de CRUD
     public UsuarioEntity registrarUsuario(UsuarioEntity novoUsuario, UsuarioEntity solicitante) {
         if (solicitante.getTipoUsuario() != TipoUsuario.GERENTE) {
-            throw new SecurityException("Apenas gerentes podem registrar novos usuários");
+            JOptionPane.showMessageDialog(null, "Apenas gerentes porem cadastrar usuários!");
         }
 
         if (usuarioRepository.buscarPorEmail(novoUsuario.getEmail()) != null) {
-            throw new IllegalArgumentException("Email já cadastrado");
+            JOptionPane.showMessageDialog(null, "Email já cadastrado!");
         }
 
         usuarioRepository.salvar(novoUsuario);

@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import zad_inventory.auth.LoginService;
 import zad_inventory.config.DBConnection;
-import zad_inventory.repository.UsuarioRepository;
 import zad_inventory.service.UsuarioService;
 import javax.persistence.EntityManager;
 
@@ -31,7 +30,7 @@ public class GuiLogin extends JFrame {
     private JButton sairButton;
 
     EntityManager em = DBConnection.getEntityManager();
-    UsuarioService usuarioService = new UsuarioService(new UsuarioRepository(em));
+    UsuarioService usuarioService = new UsuarioService();
     LoginService loginService = new LoginService(usuarioService);
 
 

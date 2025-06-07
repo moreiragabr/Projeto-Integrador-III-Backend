@@ -25,11 +25,13 @@ public class GuiAdmin extends JFrame{
     private JButton gerenciarUsuariosButton;
     private JButton sairButton;
     private JPanel panelBotaosair;
+    private JLabel admLabel;
 
     private final UsuarioEntity usuarioLogado;
 
     public GuiAdmin(UsuarioEntity usuarioLogado){
         this.usuarioLogado = usuarioLogado;
+        admLabel.setText("ADM: "+usuarioLogado.getNome());
 
         setContentPane(panelTelaAdmin);
         setTitle("Tela Admin");
