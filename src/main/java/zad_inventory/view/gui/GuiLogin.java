@@ -1,14 +1,14 @@
 package zad_inventory.view.gui;
 
-import zad_inventory.model.UsuarioEntity;
+import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.view.MenuPrincipal;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import zad_inventory.auth.LoginService;
-import zad_inventory.config.DBConnection;
-import zad_inventory.service.UsuarioService;
+import zad_inventory.model.auth.LoginService;
+import zad_inventory.model.config.DBConnection;
+import zad_inventory.model.service.UsuarioService;
 import javax.persistence.EntityManager;
 
 

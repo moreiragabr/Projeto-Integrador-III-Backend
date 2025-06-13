@@ -1,7 +1,7 @@
 package zad_inventory.controller;
 
-import zad_inventory.model.UsuarioEntity;
-import zad_inventory.service.UsuarioService;
+import zad_inventory.model.entity.UsuarioEntity;
+import zad_inventory.model.service.UsuarioService;
 
 import java.util.List;
 

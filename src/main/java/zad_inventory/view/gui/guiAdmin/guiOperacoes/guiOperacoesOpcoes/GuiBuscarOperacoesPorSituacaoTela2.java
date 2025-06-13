@@ -1,10 +1,10 @@
 package zad_inventory.view.gui.guiAdmin.guiOperacoes.guiOperacoesOpcoes;
 
 import zad_inventory.controller.OperacaoController;
-import zad_inventory.enums.Situacao;
-import zad_inventory.model.OperacaoEntity;
-import zad_inventory.model.ProdutoEntity;
-import zad_inventory.model.UsuarioEntity;
+import zad_inventory.model.enums.Situacao;
+import zad_inventory.model.entity.OperacaoEntity;
+import zad_inventory.model.entity.ProdutoEntity;
+import zad_inventory.model.entity.UsuarioEntity;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

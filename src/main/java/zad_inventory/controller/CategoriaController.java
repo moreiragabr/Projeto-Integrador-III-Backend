@@ -1,7 +1,7 @@
 package zad_inventory.controller;
 
-import zad_inventory.model.CategoriaEntity;
-import zad_inventory.service.CategoriaService;
+import zad_inventory.model.entity.CategoriaEntity;
+import zad_inventory.model.service.CategoriaService;
 import java.util.List;
 
 public class CategoriaController {

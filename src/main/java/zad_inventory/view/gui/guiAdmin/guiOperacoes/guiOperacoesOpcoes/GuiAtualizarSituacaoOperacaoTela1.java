@@ -1,11 +1,9 @@
 package zad_inventory.view.gui.guiAdmin.guiOperacoes.guiOperacoesOpcoes;
 
 import zad_inventory.controller.OperacaoController;
-import zad_inventory.model.OperacaoEntity;
-import zad_inventory.model.ProdutoEntity;
-import zad_inventory.model.UsuarioEntity;
+import zad_inventory.model.entity.OperacaoEntity;
+import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.view.gui.guiAdmin.guiOperacoes.GuiOperacoes;
-import zad_inventory.view.gui.guiAdmin.guiProdutos.guiProdutosOpcoes.GuiModificarProdutoTela2;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

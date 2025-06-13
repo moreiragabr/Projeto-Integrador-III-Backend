@@ -1,7 +1,7 @@
 package zad_inventory.view.gui.guiAdmin.guiProdutos.guiProdutosOpcoes;
 
-import zad_inventory.model.ProdutoEntity;
-import zad_inventory.model.UsuarioEntity;
+import zad_inventory.model.entity.ProdutoEntity;
+import zad_inventory.model.entity.UsuarioEntity;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

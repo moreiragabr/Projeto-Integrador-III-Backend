@@ -1,11 +1,11 @@
 package zad_inventory.controller;
 
-import zad_inventory.model.ProdutoEntity;
-import zad_inventory.model.UsuarioEntity;
-import zad_inventory.service.ProdutoService;
-import zad_inventory.repository.ProdutoRepository;
-import zad_inventory.repository.CategoriaRepository;
-import zad_inventory.config.DBConnection;
+import zad_inventory.model.entity.ProdutoEntity;
+import zad_inventory.model.entity.UsuarioEntity;
+import zad_inventory.model.service.ProdutoService;
+import zad_inventory.model.repository.ProdutoRepository;
+import zad_inventory.model.repository.CategoriaRepository;
+import zad_inventory.model.config.DBConnection;
 import javax.persistence.EntityManager;
 import java.util.List;
 

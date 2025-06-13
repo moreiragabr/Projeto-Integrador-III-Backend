@@ -1,11 +1,8 @@
 package zad_inventory.view.gui.guiAdmin.guiUsuarios.guiUsuariosOpcoes;
 
 import zad_inventory.controller.UsuarioController;
-import zad_inventory.enums.Situacao;
-import zad_inventory.enums.TipoUsuario;
-import zad_inventory.model.UsuarioEntity;
-import zad_inventory.repository.UsuarioRepository;
-import zad_inventory.service.UsuarioService;
+import zad_inventory.model.enums.TipoUsuario;
+import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.view.gui.guiAdmin.guiUsuarios.GuiUsuarios;
 
 import javax.swing.*;

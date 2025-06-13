@@ -1,8 +1,8 @@
 package zad_inventory.view.gui.guiAdmin.guiProdutos.guiProdutosOpcoes;
 
 import zad_inventory.controller.ProdutoController;
-import zad_inventory.model.ProdutoEntity;
-import zad_inventory.model.UsuarioEntity;
+import zad_inventory.model.entity.ProdutoEntity;
+import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.view.gui.guiAdmin.guiProdutos.GuiProdutos;
 
 import javax.swing.*;

@@ -1,10 +1,10 @@
 package zad_inventory.controller;
 
 import java.util.List;
-import zad_inventory.model.OperacaoEntity;
-import zad_inventory.model.UsuarioEntity;
-import zad_inventory.enums.Situacao;
-import zad_inventory.service.OperacaoService;
+import zad_inventory.model.entity.OperacaoEntity;
+import zad_inventory.model.entity.UsuarioEntity;
+import zad_inventory.model.enums.Situacao;
+import zad_inventory.model.service.OperacaoService;
 
 public class OperacaoController {
 

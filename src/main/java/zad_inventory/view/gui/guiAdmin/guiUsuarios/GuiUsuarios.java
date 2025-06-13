@@ -1,16 +1,12 @@
 package zad_inventory.view.gui.guiAdmin.guiUsuarios;
 
-import zad_inventory.config.DBConnection;
 import zad_inventory.controller.UsuarioController;
-import zad_inventory.model.UsuarioEntity;
-import zad_inventory.repository.UsuarioRepository;
-import zad_inventory.service.UsuarioService;
+import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.view.gui.guiAdmin.GuiAdmin;
 import zad_inventory.view.gui.guiAdmin.guiUsuarios.guiUsuariosOpcoes.GuiCadastroUsuarios;
 import zad_inventory.view.gui.guiAdmin.guiUsuarios.guiUsuariosOpcoes.GuiRankingUsuarios;
 import zad_inventory.view.gui.guiAdmin.guiUsuarios.guiUsuariosOpcoes.GuiUsuariosLista;
 
-import javax.persistence.EntityManager;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

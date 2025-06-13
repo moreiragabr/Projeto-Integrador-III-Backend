@@ -1,16 +1,15 @@
 package zad_inventory.view.gui.guiAdmin.guiOperacoes.guiOperacoesOpcoes;
 
 import zad_inventory.controller.OperacaoController;
-import zad_inventory.model.OperacaoEntity;
-import zad_inventory.model.ProdutoEntity;
-import zad_inventory.model.UsuarioEntity;
+import zad_inventory.model.entity.OperacaoEntity;
+import zad_inventory.model.entity.ProdutoEntity;
+import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.view.gui.guiAdmin.guiOperacoes.GuiOperacoes;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 

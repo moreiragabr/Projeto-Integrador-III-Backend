@@ -4,17 +4,17 @@
     <persistence-unit name="zad_inventory" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>zad_inventory.model.CategoriaEntity</class>
-        <class>zad_inventory.model.OperacaoEntity</class>
-        <class>zad_inventory.model.ProdutoEntity</class>
+        <class>zad_inventory.model.entity.CategoriaEntity</class>
+        <class>zad_inventory.model.entity.OperacaoEntity</class>
+        <class>zad_inventory.model.entity.ProdutoEntity</class>
         <class>zad_inventory.model.SituacaoEntity</class>
-        <class>zad_inventory.model.UsuarioEntity</class>
+        <class>zad_inventory.model.entity.UsuarioEntity</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/zad_inventory"/>
             <property name="javax.persistence.jdbc.user" value="postgres"/>
-            <property name="javax.persistence.jdbc.password" value="98187637"/>
+            <property name="javax.persistence.jdbc.password" value="3110"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="false"/>

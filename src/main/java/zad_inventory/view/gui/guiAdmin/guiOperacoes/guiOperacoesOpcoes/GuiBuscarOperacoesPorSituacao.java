@@ -1,7 +1,7 @@
 package zad_inventory.view.gui.guiAdmin.guiOperacoes.guiOperacoesOpcoes;
 
 import zad_inventory.controller.OperacaoController;
-import zad_inventory.model.UsuarioEntity;
+import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.view.gui.guiAdmin.guiOperacoes.GuiOperacoes;
 
 import javax.swing.*;

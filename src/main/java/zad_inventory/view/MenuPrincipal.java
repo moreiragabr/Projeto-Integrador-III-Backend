@@ -1,7 +1,7 @@
 package zad_inventory.view;
 
-import zad_inventory.model.UsuarioEntity;
-import zad_inventory.enums.TipoUsuario;
+import zad_inventory.model.entity.UsuarioEntity;
+import zad_inventory.model.enums.TipoUsuario;
 import zad_inventory.view.gui.guiAdmin.GuiAdmin;
 import zad_inventory.view.gui.guiFuncionario.GuiFuncionario;
 

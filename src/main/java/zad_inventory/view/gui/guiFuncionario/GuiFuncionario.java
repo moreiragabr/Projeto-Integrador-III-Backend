@@ -2,7 +2,7 @@ package zad_inventory.view.gui.guiFuncionario;
 
 import zad_inventory.controller.OperacaoController;
 import zad_inventory.controller.ProdutoController;
-import zad_inventory.model.UsuarioEntity;
+import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.view.gui.GuiLogin;
 import zad_inventory.view.gui.guiFuncionario.guiFuncionarioOpcoes.GuiListarProdutosFuncionario;
 import zad_inventory.view.gui.guiFuncionario.guiFuncionarioOpcoes.GuiListarVendasFuncionario;

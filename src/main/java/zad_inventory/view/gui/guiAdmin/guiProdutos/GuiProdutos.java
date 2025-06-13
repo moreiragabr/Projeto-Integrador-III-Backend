@@ -2,7 +2,7 @@ package zad_inventory.view.gui.guiAdmin.guiProdutos;
 
 import zad_inventory.controller.CategoriaController;
 import zad_inventory.controller.ProdutoController;
-import zad_inventory.model.UsuarioEntity;
+import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.view.gui.guiAdmin.GuiAdmin;
 import zad_inventory.view.gui.guiAdmin.guiProdutos.guiProdutosOpcoes.*;
 

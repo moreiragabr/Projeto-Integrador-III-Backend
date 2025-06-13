@@ -1,6 +1,6 @@
 package zad_inventory.view.gui.guiAdmin;
 
-import zad_inventory.model.UsuarioEntity;
+import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.view.gui.GuiLogin;
 import zad_inventory.view.gui.guiAdmin.guiCategorias.GuiCategorias;
 import zad_inventory.view.gui.guiAdmin.guiOperacoes.GuiOperacoes;

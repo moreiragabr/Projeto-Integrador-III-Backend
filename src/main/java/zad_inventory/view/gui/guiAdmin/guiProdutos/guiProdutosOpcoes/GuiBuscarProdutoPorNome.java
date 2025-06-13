@@ -1,15 +1,13 @@
 package zad_inventory.view.gui.guiAdmin.guiProdutos.guiProdutosOpcoes;
 
 import zad_inventory.controller.ProdutoController;
-import zad_inventory.model.ProdutoEntity;
-import zad_inventory.model.UsuarioEntity;
+import zad_inventory.model.entity.ProdutoEntity;
+import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.view.gui.guiAdmin.guiProdutos.GuiProdutos;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GuiBuscarProdutoPorNome extends JFrame {
     private JPanel panelTitulo;
