@@ -3,107 +3,48 @@ package zad_inventory.controller;
 import zad_inventory.model.entity.ProdutoEntity;
 import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.model.service.ProdutoService;
-import zad_inventory.model.repository.ProdutoRepository;
-import zad_inventory.model.repository.CategoriaRepository;
-import zad_inventory.model.config.DBConnection;
-import javax.persistence.EntityManager;
+
 import java.util.List;
 
-
 public class ProdutoController {
+
     private final ProdutoService produtoService;
     private final UsuarioEntity usuarioLogado;
-    private final EntityManager em;
 
     public ProdutoController(UsuarioEntity usuarioLogado) {
+        this.produtoService = new ProdutoService();
         this.usuarioLogado = usuarioLogado;
-        this.em = DBConnection.getEntityManager();
-
-
-        ProdutoRepository produtoRepo = new ProdutoRepository(this.em);
-        CategoriaRepository categoriaRepo = new CategoriaRepository(this.em);
-        this.produtoService = new ProdutoService(produtoRepo, categoriaRepo);
     }
 
-    public ProdutoEntity cadastrarProduto(String nome, String cor, String tamanho, int quantidade, Long categoriaId) {
-        if (usuarioLogado == null || usuarioLogado.getId() == null) {
-            throw new IllegalStateException("Nenhum usuário logado. Operação de cadastro de produto não permitida.");
-        }
-
-        ProdutoEntity novoProduto = new ProdutoEntity();
-        novoProduto.setNomeProduto(nome);
-        novoProduto.setCor(cor);
-        novoProduto.setTamanho(tamanho);
-        novoProduto.setQuantidade(quantidade);
-        novoProduto.setCategoriaId(categoriaId);
-        // ID atribuido pelo service
-        return produtoService.salvarProduto(novoProduto, usuarioLogado.getId());
+    public ProdutoEntity cadastrarProduto(String nomeProduto, String cor, String tamanho, int quantidade, Long categoriaId) {
+        return produtoService.cadastrarProduto(usuarioLogado, nomeProduto, cor, tamanho, quantidade, categoriaId);
     }
 
     public List<ProdutoEntity> listarTodosProdutos() {
-        return produtoService.buscarTodos();
+        return produtoService.listarTodosProdutos();
     }
 
     public ProdutoEntity buscarProdutoPorId(Long id) {
-
         return produtoService.buscarPorId(id);
     }
 
-    public ProdutoEntity atualizarProduto(Long id, String nome, String cor, String tamanho, Integer quantidade, Long categoriaId) {
-        ProdutoEntity produtoExistente = produtoService.buscarPorId(id);
-
-
-        Long categoriaIdOriginal = produtoExistente.getCategoriaId();
-
-
-        if (nome != null && !nome.trim().isEmpty()) {
-            produtoExistente.setNomeProduto(nome);
-        }
-        if (cor != null && !cor.trim().isEmpty()) {
-            produtoExistente.setCor(cor);
-        }
-        if (tamanho != null && !tamanho.trim().isEmpty()) {
-            produtoExistente.setTamanho(tamanho);
-        }
-        if (quantidade != null) {
-            produtoExistente.setQuantidade(quantidade);
-        }
-        if (categoriaId != null) {
-            produtoExistente.setCategoriaId(categoriaId);
-        }
-
-
-        return produtoService.atualizarProduto(produtoExistente, categoriaIdOriginal);
-    }
-
     public void removerProduto(Long id) {
-        produtoService.removerProduto(id);
-    }
-
-    public List<ProdutoEntity> buscarProdutosPorNome(String nome) {
-        return produtoService.buscarPorNome(nome);
-    }
-
-    public ProdutoEntity buscarProdutoPorNome(String nome){
-        return produtoService.buscarPorNomeIgnoreCase(nome);
+        produtoService.removerProduto(usuarioLogado, id);
     }
 
     public List<ProdutoEntity> buscarProdutosPorCategoria(Long categoriaId) {
-        return produtoService.buscarPorCategoria(categoriaId);
+        return produtoService.buscarProdutosPorCategoria(categoriaId);
     }
 
-    public ProdutoEntity adicionarEstoqueProduto(Long id, int quantidadeParaAdicionar) {
-        return produtoService.adicionarEstoque(id, quantidadeParaAdicionar);
+    public ProdutoEntity buscarProdutoPorNome(String nomeProduto) {
+        return produtoService.buscarProdutoPorNome(nomeProduto);
     }
 
-    public ProdutoEntity removerEstoqueProduto(Long id, int quantidadeParaRemover) {
-        return produtoService.removerEstoque(id, quantidadeParaRemover);
+    public void atualizarProduto(Long id, String nome, String cor, String tamanho, int quantidade, Long categoriaId) {
+        produtoService.atualizarProduto(usuarioLogado, id, nome, cor, tamanho, quantidade, categoriaId);
     }
 
 
-    public void close() {
-        if (this.em != null && this.em.isOpen()) {
-            this.em.close();
-        }
-    }
+
+
 }

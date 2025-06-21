@@ -7,81 +7,64 @@ import javax.persistence.NoResultException;
 import java.util.List;
 
 public class ProdutoRepository {
-    private final EntityManager em;
 
-    public ProdutoRepository(EntityManager em) {
-        this.em = em;
+    private final EntityManager entityManager;
+
+    public ProdutoRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
-    public ProdutoEntity save(ProdutoEntity produto) {
-        try {
-            em.getTransaction().begin();
-            if (produto.getId() == null) {
-                em.persist(produto);
-            } else {
-                produto = em.merge(produto);
-            }
-            em.getTransaction().commit();
-            return produto;
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw new RuntimeException("Erro ao salvar produto", e);
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public void salvar(ProdutoEntity produto) {
+        if (produto.getId() == null) {
+            entityManager.persist(produto);
+        } else {
+            entityManager.merge(produto);
         }
     }
 
-    public ProdutoEntity findById(Long id) {
+    public ProdutoEntity buscarPorId(Long id) {
         try {
-            return em.createQuery(
-                            "SELECT p FROM ProdutoEntity p " +
-                                    "LEFT JOIN FETCH p.categoria " +
-                                    "WHERE p.id = :id", ProdutoEntity.class)
+            return entityManager.createQuery(
+                            "SELECT p FROM ProdutoEntity p LEFT JOIN FETCH p.categoria WHERE p.id = :id",
+                            ProdutoEntity.class)
                     .setParameter("id", id)
                     .getSingleResult();
-        } catch (Exception e) {
+        } catch (NoResultException e) {
             return null;
         }
     }
 
-    public List<ProdutoEntity> findAll() {
-        return em.createQuery(
-                        "SELECT p FROM ProdutoEntity p " +
-                                "LEFT JOIN FETCH p.categoria", ProdutoEntity.class)
+    public List<ProdutoEntity> listarTodos() {
+        return entityManager.createQuery(
+                        "SELECT p FROM ProdutoEntity p LEFT JOIN FETCH p.categoria",
+                        ProdutoEntity.class)
                 .getResultList();
     }
 
-    public void delete(Long id) {
-        try {
-            em.getTransaction().begin();
-            ProdutoEntity produto = findById(id);
-            if (produto != null) {
-                em.remove(produto);
-            }
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw new RuntimeException("Erro ao remover produto", e);
-        }
+    public void excluir(ProdutoEntity produto) {
+        entityManager.remove(produto);
     }
 
-    public List<ProdutoEntity> findByNomeContaining(String nome) {
-        return em.createQuery(
-                        "SELECT p FROM ProdutoEntity p " +
-                                "LEFT JOIN FETCH p.categoria " +
-                                "WHERE p.nomeProduto LIKE :nome", ProdutoEntity.class)
-                .setParameter("nome", "%" + nome + "%")
+
+    public List<ProdutoEntity> buscarPorCategoria(Long categoriaId) {
+        return entityManager.createQuery(
+                        "SELECT p FROM ProdutoEntity p LEFT JOIN FETCH p.categoria " +
+                                "WHERE p.categoria.id = :categoriaId",
+                        ProdutoEntity.class)
+                .setParameter("categoriaId", categoriaId)
                 .getResultList();
     }
 
-    public ProdutoEntity findByNomeIgnoreCase(String nome) {
+    public ProdutoEntity buscarPorNomeExato(String nomeProduto) {
         try {
-            return em.createQuery(
+            return entityManager.createQuery(
                             "SELECT p FROM ProdutoEntity p WHERE LOWER(p.nomeProduto) = LOWER(:nome)",
                             ProdutoEntity.class)
-                    .setParameter("nome", nome)
+                    .setParameter("nome", nomeProduto)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -89,36 +72,4 @@ public class ProdutoRepository {
     }
 
 
-    public List<ProdutoEntity> findByCategoriaId(Long categoriaId) {
-        return em.createQuery(
-                        "SELECT p FROM ProdutoEntity p " +
-                                "LEFT JOIN FETCH p.categoria " +
-                                "WHERE p.categoria.id = :categoriaId", ProdutoEntity.class)
-                .setParameter("categoriaId", categoriaId)
-                .getResultList();
-    }
-
-    public int countByCategoriaId(Long categoriaId) {
-        return em.createQuery(
-                        "SELECT COUNT(p) FROM ProdutoEntity p " +
-                                "WHERE p.categoria.id = :categoriaId", Long.class)
-                .setParameter("categoriaId", categoriaId)
-                .getSingleResult()
-                .intValue();
-    }
-
-    public int countOperacoesVinculadas(Long produtoId) {
-        return em.createQuery(
-                        "SELECT COUNT(o) FROM OperacaoEntity o " +
-                                "WHERE o.produto.id = :produtoId", Long.class)
-                .setParameter("produtoId", produtoId)
-                .getSingleResult()
-                .intValue();
-    }
-
-    public void close() {
-        if (em != null && em.isOpen()) {
-            em.close();
-        }
-    }
 }

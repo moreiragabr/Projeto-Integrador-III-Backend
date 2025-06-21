@@ -1,157 +1,131 @@
 package zad_inventory.model.service;
 
-import zad_inventory.model.entity.CategoriaEntity;
-import zad_inventory.model.entity.ProdutoEntity;
-import zad_inventory.model.repository.ProdutoRepository;
 import zad_inventory.model.config.DBConnection;
-import javax.persistence.EntityManager;
+import zad_inventory.model.entity.ProdutoEntity;
+import zad_inventory.model.entity.UsuarioEntity;
 import zad_inventory.model.repository.CategoriaRepository;
+import zad_inventory.model.repository.ProdutoRepository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.swing.*;
 import java.util.List;
 
 public class ProdutoService {
+
     private final ProdutoRepository produtoRepository;
     private final CategoriaRepository categoriaRepository;
+    private final EntityManager entityManager;
 
+    public ProdutoService() {
+        this.entityManager = DBConnection.getEntityManager();
+        this.produtoRepository = new ProdutoRepository(entityManager);
+        this.categoriaRepository = new CategoriaRepository(entityManager);
+    }
 
     public ProdutoService(ProdutoRepository produtoRepository, CategoriaRepository categoriaRepository) {
+        this.entityManager = produtoRepository.getEntityManager();
         this.produtoRepository = produtoRepository;
         this.categoriaRepository = categoriaRepository;
     }
 
 
-    public ProdutoService() {
-        EntityManager em = DBConnection.getEntityManager();
-        this.produtoRepository = new ProdutoRepository(em);
-        this.categoriaRepository = new CategoriaRepository(em);
+    public void salvarProduto(ProdutoEntity produto, Long usuarioId) {
+        salvarProduto(produto);
     }
 
 
-    public ProdutoEntity salvarProduto(ProdutoEntity produto, Long usuarioIdLogado) {
-        validarProduto(produto);
-        if (produto.getCategoriaId() == null || !categoriaRepository.existsById(produto.getCategoriaId())) {
-            throw new IllegalArgumentException("Categoria com ID " + produto.getCategoriaId() + " não encontrada ou ID da categoria nulo.");
+    public void salvarProduto(ProdutoEntity produto) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            produtoRepository.salvar(produto);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            JOptionPane.showMessageDialog(null, "Erro ao salvar produto: " + e.getMessage());
         }
-
-        CategoriaEntity categoriaAssociada = categoriaRepository.buscarPorId(produto.getCategoriaId());
-        if (categoriaAssociada == null) {
-            throw new IllegalArgumentException("Categoria com ID " + produto.getCategoriaId() + " não encontrada.");
-        }
-        produto.setCategoria(categoriaAssociada);
-        produto.setUsuarioId(usuarioIdLogado);
-        ProdutoEntity produtoSalvo = produtoRepository.save(produto);
-        if (produtoSalvo == null) {
-            throw new IllegalStateException("Erro ao salvar o produto.");
-        }
-        return produtoSalvo;
     }
 
-    public List<ProdutoEntity> buscarTodos() {
-        return produtoRepository.findAll();
+    public List<ProdutoEntity> buscarProdutosPorCategoria(Long categoriaId) {
+        return produtoRepository.buscarPorCategoria(categoriaId);
+    }
+
+    public ProdutoEntity buscarProdutoPorNome(String nomeProduto) {
+        return produtoRepository.buscarPorNomeExato(nomeProduto);
+    }
+
+
+
+    public ProdutoEntity cadastrarProduto(UsuarioEntity usuario, String nomeProduto, String cor, String tamanho, int quantidade, Long categoriaId) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        ProdutoEntity produto = new ProdutoEntity();
+        try {
+            transaction.begin();
+            produto.setNomeProduto(nomeProduto);
+            produto.setCor(cor);
+            produto.setTamanho(tamanho);
+            produto.setQuantidade(quantidade);
+            produto.setCategoriaId(categoriaId);
+            produto.setUsuario(usuario);
+            produtoRepository.salvar(produto);
+            transaction.commit();
+            return produto;
+        } catch (Exception e) {
+            transaction.rollback();
+            JOptionPane.showMessageDialog(null, "Erro ao cadastrar produto: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public List<ProdutoEntity> listarTodosProdutos() {
+        return produtoRepository.listarTodos();
     }
 
     public ProdutoEntity buscarPorId(Long id) {
-        return produtoRepository.findById(id);
+        return produtoRepository.buscarPorId(id);
     }
 
-    public ProdutoEntity atualizarProduto(ProdutoEntity produto, Long categoriaIdOriginal) {
-        validarProduto(produto);
-        if (produto.getId() == null) {
-            throw new IllegalArgumentException("Produto precisa de um ID para ser atualizado.");
-        }
-        if (produto.getCategoriaId() == null || !categoriaRepository.existsById(produto.getCategoriaId())) {
-            if (produto.getCategoriaId() == null && categoriaIdOriginal != null && !categoriaRepository.existsById(categoriaIdOriginal)) {
-                throw new IllegalArgumentException("Categoria original com ID " + categoriaIdOriginal + " não encontrada.");
-            } else if (produto.getCategoriaId() != null) {
-                throw new IllegalArgumentException("Nova categoria com ID " + produto.getCategoriaId() + " não encontrada.");
+    public void atualizarProduto(UsuarioEntity usuario, Long id, String nome, String cor, String tamanho, int quantidade, Long categoriaId) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            ProdutoEntity produto = produtoRepository.buscarPorId(id);
+            if (produto != null) {
+                produto.setNomeProduto(nome);
+                produto.setCor(cor);
+                produto.setTamanho(tamanho);
+                produto.setQuantidade(quantidade);
+                produto.setCategoriaId(categoriaId);
+                produto.setUsuario(usuario);
+                produtoRepository.salvar(produto);
+                transaction.commit();
+            } else {
+                JOptionPane.showMessageDialog(null, "Produto não encontrado para atualização!");
+                transaction.rollback();
             }
+        } catch (Exception e) {
+            transaction.rollback();
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar produto: " + e.getMessage());
         }
-        return produtoRepository.save(produto);
     }
+    
 
-    public void removerProduto(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("ID do produto para remoção não pode ser nulo.");
-        }
-        produtoRepository.findById(id); // Garante que o produto existe ou lança exceção
-
-        if (produtoRepository.countOperacoesVinculadas(id) > 0) {
-            throw new IllegalStateException("Não é possível remover o produto. Existem operações de venda vinculadas a ele.");
-        }
-        produtoRepository.delete(id);
-    }
-
-    public List<ProdutoEntity> buscarPorNome(String nome) {
-        if (nome == null || nome.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome não pode ser vazio");
-        }
-        return produtoRepository.findByNomeContaining(nome);
-    }
-
-    public ProdutoEntity buscarPorNomeIgnoreCase(String nome) {
-        if (nome == null || nome.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome do produto não pode ser vazio");
-        }
-
-        ProdutoEntity produto = produtoRepository.findByNomeIgnoreCase(nome.trim());
-
-        if (produto == null) {
-            throw new IllegalArgumentException("Produto com nome '" + nome + "' não encontrado");
-        }
-
-        return produto;
-    }
-
-
-    public List<ProdutoEntity> buscarPorCategoria(Long categoriaId) {
-        if (categoriaId == null) {
-            throw new IllegalArgumentException("ID da categoria para busca não pode ser nulo.");
-        }
-        if (!categoriaRepository.existsById(categoriaId)) {
-            throw new IllegalArgumentException("Categoria com ID " + categoriaId + " não encontrada para realizar a busca de produtos.");
-        }
-        return produtoRepository.findByCategoriaId(categoriaId);
-    }
-
-    public ProdutoEntity adicionarEstoque(Long produtoId, int quantidade) {
-        if (produtoId == null) {
-            throw new IllegalArgumentException("ID do produto não pode ser nulo.");
-        }
-        if (quantidade <= 0) {
-            throw new IllegalArgumentException("Quantidade a ser adicionada deve ser maior que zero.");
-        }
-
-        ProdutoEntity produto = buscarPorId(produtoId);
-        produto.setQuantidade(produto.getQuantidade() + quantidade);
-        return produtoRepository.save(produto);
-    }
-
-    public ProdutoEntity removerEstoque(Long produtoId, int quantidade) {
-        if (produtoId == null) {
-            throw new IllegalArgumentException("ID do produto não pode ser nulo.");
-        }
-        if (quantidade <= 0) {
-            throw new IllegalArgumentException("Quantidade a ser removida deve ser maior que zero.");
-        }
-
-        ProdutoEntity produto = buscarPorId(produtoId);
-        if (produto.getQuantidade() < quantidade) {
-            throw new IllegalStateException("Estoque insuficiente para remover a quantidade solicitada. Estoque atual: " + produto.getQuantidade());
-        }
-
-        produto.setQuantidade(produto.getQuantidade() - quantidade);
-        return produtoRepository.save(produto);
-    }
-
-    private void validarProduto(ProdutoEntity produto) {
-        if (produto == null) {
-            throw new IllegalArgumentException("Dados do produto não podem ser nulos.");
-        }
-        if (produto.getNomeProduto() == null || produto.getNomeProduto().trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome do produto é obrigatório.");
-        }
-        if (produto.getQuantidade() < 0) {
-            throw new IllegalArgumentException("Quantidade do produto não pode ser negativa.");
+    public void removerProduto(UsuarioEntity usuario, Long id) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            ProdutoEntity produto = produtoRepository.buscarPorId(id);
+            if (produto != null) {
+                produtoRepository.excluir(produto);
+                transaction.commit();
+            } else {
+                JOptionPane.showMessageDialog(null, "Produto não encontrado!");
+                transaction.rollback();
+            }
+        } catch (Exception e) {
+            transaction.rollback();
+            JOptionPane.showMessageDialog(null, "Erro ao remover produto: " + e.getMessage());
         }
     }
 }
-
