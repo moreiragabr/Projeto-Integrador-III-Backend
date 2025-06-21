@@ -24,7 +24,8 @@ public class OperacaoService {
         this.repo = new OperacaoRepository(em);
         this.produtoService = new ProdutoService(
                 new ProdutoRepository(em),
-                new CategoriaRepository(em)
+                new CategoriaRepository(em),
+                new UsuarioService()
         );
     }
 
@@ -48,7 +49,7 @@ public class OperacaoService {
 
         // Atualiza estoque
         produto.setQuantidade(produto.getQuantidade() - quantidade);
-        produtoService.salvarProduto(produto, usuario.getId()); // LINHA CORRIGIDA
+        produtoService.salvarProduto(produto, usuario.getId());
 
         // Cria e salva operação
         OperacaoEntity op = new OperacaoEntity();
@@ -58,15 +59,14 @@ public class OperacaoService {
         op.setSituacao(Situacao.REALIZADA);
         op.setData(LocalDateTime.now());
         repo.save(op);
-        JOptionPane.showMessageDialog(null, "Produto vendido com sucesso!");
-        return op; // Return da entidade criada
-    }
 
+        JOptionPane.showMessageDialog(null, "Produto vendido com sucesso!");
+        return op;
+    }
 
     public List<OperacaoEntity> buscarTodos() {
         return repo.listAll();
     }
-
 
     public OperacaoEntity buscarPorId(Long id) {
         OperacaoEntity op = repo.findById(id);
@@ -76,7 +76,6 @@ public class OperacaoService {
         return op;
     }
 
-
     public OperacaoEntity atualizarSituacao(Long id, Situacao novaSituacao) {
         OperacaoEntity op = repo.findById(id);
         if (op == null) {
@@ -84,9 +83,8 @@ public class OperacaoService {
         }
         op.setSituacao(novaSituacao);
         repo.update(op);
-        return op; // Return da entidade atualizada
+        return op;
     }
-
 
     public List<OperacaoEntity> filtrarPorSituacao(Situacao situacao) {
         if (situacao == null) {

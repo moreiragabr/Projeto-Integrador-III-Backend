@@ -64,17 +64,11 @@ public class UsuarioRepository {
                                 "GROUP BY u", Object[].class)
                 .getResultList();
 
-        em.getTransaction().begin();
-
-        List<UsuarioEntity> usuarios = resultados.stream().map(result -> {
+        return resultados.stream().map(result -> {
             UsuarioEntity usuario = (UsuarioEntity) result[0];
             Long total = (Long) result[1];
             usuario.setTotalProdutos(total);
-            return em.merge(usuario);
+            return usuario;
         }).collect(Collectors.toList());
-
-        em.getTransaction().commit();
-
-        return usuarios;
     }
 }

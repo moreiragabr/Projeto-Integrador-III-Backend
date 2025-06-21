@@ -21,14 +21,11 @@ public class ProdutoEntity {
     private CategoriaEntity categoria;
 
     @Column(name = "fk_categoria_id")
-    private Long categoriaId;  // Alterado de int para Long
+    private Long categoriaId;  // Pode continuar para facilitar consultas ou filtros
 
     @ManyToOne
-    @JoinColumn(name = "fk_usuario_id", insertable = false, updatable = false)
+    @JoinColumn(name = "fk_usuario_id")  // <- Aqui o JPA gerencia FK
     private UsuarioEntity usuario;
-
-    @Column(name = "fk_usuario_id")
-    private Long usuarioId;
 
     @Column(name = "cor")
     private String cor;
@@ -38,14 +35,14 @@ public class ProdutoEntity {
 
     public ProdutoEntity() {}
 
-    // Construtor atualizado (categoriaId como Long)
+    // Construtor atualizado (sem usuarioId)
     public ProdutoEntity(Long id, String nomeProduto, int quantidade, Long categoriaId,
-                         Long usuarioId, String cor, String tamanho) {
+                         UsuarioEntity usuario, String cor, String tamanho) {
         this.id = id;
         this.nomeProduto = nomeProduto;
         this.quantidade = quantidade;
         this.categoriaId = categoriaId;
-        this.usuarioId = usuarioId;
+        this.usuario = usuario;
         this.cor = cor;
         this.tamanho = tamanho;
     }
@@ -59,7 +56,7 @@ public class ProdutoEntity {
                 ", categoriaId=" + categoriaId +
                 ", nomeCategoria=" + getNomeCategoria() +
                 ", descricaoCategoria=" + getDescricaoCategoria() +
-                ", usuarioId=" + usuarioId +
+                ", usuarioId=" + (usuario != null ? usuario.getId() : null) +
                 ", cor='" + cor + '\'' +
                 ", tamanho='" + tamanho + '\'' +
                 '}';
@@ -75,11 +72,8 @@ public class ProdutoEntity {
     public int getQuantidade() { return quantidade; }
     public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
 
-    public Long getCategoriaId() { return categoriaId; }  // Retorno alterado para Long
-    public void setCategoriaId(Long categoriaId) { this.categoriaId = categoriaId; }  // Parâmetro alterado para Long
-
-    public Long getUsuarioId() { return usuarioId; }
-    public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
+    public Long getCategoriaId() { return categoriaId; }
+    public void setCategoriaId(Long categoriaId) { this.categoriaId = categoriaId; }
 
     public String getCor() { return cor; }
     public void setCor(String cor) { this.cor = cor; }
